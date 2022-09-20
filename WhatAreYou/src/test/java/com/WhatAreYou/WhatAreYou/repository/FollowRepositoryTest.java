@@ -2,6 +2,8 @@ package com.WhatAreYou.WhatAreYou.repository;
 
 import com.WhatAreYou.WhatAreYou.domain.Follow;
 import com.WhatAreYou.WhatAreYou.domain.Member;
+import com.WhatAreYou.WhatAreYou.repository.follow.FollowRepository;
+import com.WhatAreYou.WhatAreYou.repository.member.MemberRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,9 +12,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -68,7 +67,7 @@ class FollowRepositoryTest {
         em.flush();
         em.clear();
         //when
-        int count = followRepository.mFollowCount(memberA);
+        Long count = followRepository.mFollowCount(memberA);
         //then
         System.out.println("count = " + count);
 
@@ -87,8 +86,8 @@ class FollowRepositoryTest {
         em.flush();
         em.clear();
 
-        int followTrue = followRepository.mFollowState(memberA, memberB);
-        int followFalse = followRepository.mFollowState(memberA, memberC);
+        Long followTrue = followRepository.mFollowState(memberA, memberB);
+        Long followFalse = followRepository.mFollowState(memberA, memberC);
         //when
 
         System.out.println("followFalse = " + followFalse);

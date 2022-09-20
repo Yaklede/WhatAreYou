@@ -1,17 +1,15 @@
-package com.WhatAreYou.WhatAreYou.service;
+package com.WhatAreYou.WhatAreYou.service.board;
 
 import com.WhatAreYou.WhatAreYou.domain.Board;
-import com.WhatAreYou.WhatAreYou.domain.Member;
 import com.WhatAreYou.WhatAreYou.dto.BoardUpdateForm;
-import com.WhatAreYou.WhatAreYou.repository.BoardRepository;
-import com.WhatAreYou.WhatAreYou.repository.MemberRepository;
+import com.WhatAreYou.WhatAreYou.error.ERROR;
+import com.WhatAreYou.WhatAreYou.repository.board.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -31,14 +29,14 @@ public class BoardServiceImpl implements BoardService {
     @Transactional
     @Override
     public void delete(Long boardId) {
-        Board findBoard = boardRepository.findById(boardId).orElse(null);
+        Board findBoard = boardRepository.findById(boardId).orElseThrow(() -> new IllegalArgumentException(ERROR.board));
         boardRepository.delete(findBoard);
     }
 
     @Transactional
     @Override
     public void update(Long boardId,BoardUpdateForm updateForm) {
-        Board findBoard = boardRepository.findById(boardId).orElse(null);
+        Board findBoard = boardRepository.findById(boardId).orElseThrow(() -> new IllegalArgumentException(ERROR.board));
         boardUpdate(findBoard, updateForm);
     }
 
@@ -51,7 +49,7 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public Board findByBoardId(Long boardId) {
 
-        return boardRepository.findById(boardId).orElse(null);
+        return boardRepository.findById(boardId).orElseThrow(() -> new IllegalArgumentException(ERROR.board));
     }
 
     @Override

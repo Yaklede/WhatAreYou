@@ -1,8 +1,8 @@
-package com.WhatAreYou.WhatAreYou.service;
+package com.WhatAreYou.WhatAreYou.service.file;
 
 import com.WhatAreYou.WhatAreYou.domain.FileEntity;
-import com.WhatAreYou.WhatAreYou.repository.FileRepository;
-import lombok.Builder;
+import com.WhatAreYou.WhatAreYou.error.ERROR;
+import com.WhatAreYou.WhatAreYou.repository.file.FileRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
@@ -40,8 +39,9 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public Long updateFile(FileEntity updateFile, MultipartFile multipartFile) throws IOException {
-        FileEntity findFile = fileRepository.findById(updateFile.getId()).orElseThrow(() -> new IllegalArgumentException("파일이 존재하지 않습니다."));
+    public Long
+    updateFile(FileEntity updateFile, MultipartFile multipartFile) throws IOException {
+        FileEntity findFile = fileRepository.findById(updateFile.getId()).orElseThrow(() -> new IllegalArgumentException(ERROR.file));
         updateFile(multipartFile, findFile);
         multipartFile.transferTo(new File(findFile.getSavePath()));
         return null;
@@ -49,7 +49,7 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public FileEntity findByOne(Long fileEntityId) {
-        return fileRepository.findById(fileEntityId).orElseThrow(() -> new IllegalArgumentException("파일이 존재하지 않습니다."));
+        return fileRepository.findById(fileEntityId).orElseThrow(() -> new IllegalArgumentException(ERROR.file));
     }
 
     @Override

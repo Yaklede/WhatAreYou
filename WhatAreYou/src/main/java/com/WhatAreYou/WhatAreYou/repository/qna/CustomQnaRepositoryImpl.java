@@ -1,6 +1,5 @@
-package com.WhatAreYou.WhatAreYou.repository;
+package com.WhatAreYou.WhatAreYou.repository.qna;
 
-import com.WhatAreYou.WhatAreYou.domain.QQnA;
 import com.WhatAreYou.WhatAreYou.domain.QnA;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -30,16 +29,15 @@ public class CustomQnaRepositoryImpl implements CustomQnaRepository {
     }
 
     @Override
-    public int findByNotAnswerCount(Long qnaId) {
-        Long result = queryFactory
-                .select(qnA.count())
-                .where(
-                        qnA.id.eq(qnaId).and(
-                                qnA.answers.isNull()
-                        )
-                )
-                .from(qnA)
-                .fetchOne();
-        return (int) (long) result;
+    public Long findByNotAnswerCount(Long qnaId) {
+        return queryFactory
+                    .select(qnA.count())
+                    .where(
+                            qnA.id.eq(qnaId).and(
+                                    qnA.answers.isNull()
+                            )
+                    )
+                    .from(qnA)
+                    .fetchOne();
     }
 }

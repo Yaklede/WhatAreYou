@@ -1,15 +1,17 @@
-package com.WhatAreYou.WhatAreYou.service;
+package com.WhatAreYou.WhatAreYou.service.qna;
 
 import com.WhatAreYou.WhatAreYou.domain.Member;
 import com.WhatAreYou.WhatAreYou.domain.QnA;
-import com.WhatAreYou.WhatAreYou.repository.QnaRepository;
+import com.WhatAreYou.WhatAreYou.error.ERROR;
+import com.WhatAreYou.WhatAreYou.repository.member.MemberRepository;
+import com.WhatAreYou.WhatAreYou.repository.qna.QnaRepository;
+import com.WhatAreYou.WhatAreYou.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -19,12 +21,12 @@ public class QnaServiceImpl implements QnaService {
 
     private final QnaRepository qnaRepository;
 
-    private final MemberService memberService;
+    private final MemberRepository memberRepository;
 
     @Transactional
     @Override
     public Long question(Long memberId, String question) {
-        Member member = memberService.findByOne(memberId);
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new IllegalArgumentException(ERROR.member));
         QnA qnA = QnA.builder()
                 .member(member)
                 .questions(question)
@@ -36,7 +38,7 @@ public class QnaServiceImpl implements QnaService {
     @Transactional
     @Override
     public Long answer(Long qnaId, String answer) {
-        QnA findQna = qnaRepository.findById(qnaId).orElseThrow(() -> new IllegalArgumentException("질문을 찾지 못 했습니다."));
+        QnA findQna = qnaRepository.findById(qnaId).orElseThrow(() -> new IllegalArgumentException(ERROR.q));
         findQna.setAnswers(answer);
         return findQna.getId();
     }
@@ -47,7 +49,7 @@ public class QnaServiceImpl implements QnaService {
     }
 
     @Override
-    public int notAnswerCount(Long qnaId) {
+    public Long notAnswerCount(Long qnaId) {
         return qnaRepository.findByNotAnswerCount(qnaId);
     }
 

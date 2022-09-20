@@ -1,4 +1,4 @@
-package com.WhatAreYou.WhatAreYou.repository;
+package com.WhatAreYou.WhatAreYou.repository.file;
 
 import com.WhatAreYou.WhatAreYou.domain.FileEntity;
 import org.springframework.data.jpa.repository.JpaRepository;

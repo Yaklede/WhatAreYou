@@ -1,4 +1,4 @@
-package com.WhatAreYou.WhatAreYou.repository;
+package com.WhatAreYou.WhatAreYou.repository.qna;
 
 import com.WhatAreYou.WhatAreYou.domain.QnA;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,4 +1,4 @@
-package com.WhatAreYou.WhatAreYou.service;
+package com.WhatAreYou.WhatAreYou.service.member;
 
 import com.WhatAreYou.WhatAreYou.domain.Member;
 import com.WhatAreYou.WhatAreYou.dto.MemberUpdateForm;

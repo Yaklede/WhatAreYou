@@ -1,4 +1,4 @@
-package com.WhatAreYou.WhatAreYou.service;
+package com.WhatAreYou.WhatAreYou.service.qna;
 
 import com.WhatAreYou.WhatAreYou.domain.Member;
 import com.WhatAreYou.WhatAreYou.domain.QnA;
@@ -11,6 +11,6 @@ public interface QnaService {
     public Long question(Long memberId, String question);
     public Long answer(Long qnaId, String answer);
     public List<QnA> findAll();
-    public int notAnswerCount(Long qnaId);
+    public Long notAnswerCount(Long qnaId);
     public List<QnA> notAnswer(Long qnaId);
 }

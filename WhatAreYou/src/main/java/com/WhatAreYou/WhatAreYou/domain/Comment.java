@@ -1,10 +1,7 @@
 package com.WhatAreYou.WhatAreYou.domain;
 
 import com.WhatAreYou.WhatAreYou.base.BaseEntity;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -12,6 +9,7 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "comments")
 @Getter
+@Setter
 public class Comment extends BaseEntity {
 
     @Id

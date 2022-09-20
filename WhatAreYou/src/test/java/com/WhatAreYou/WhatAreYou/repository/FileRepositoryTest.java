@@ -2,15 +2,13 @@ package com.WhatAreYou.WhatAreYou.repository;
 
 import com.WhatAreYou.WhatAreYou.domain.Board;
 import com.WhatAreYou.WhatAreYou.domain.Member;
-import com.WhatAreYou.WhatAreYou.service.BoardService;
-import com.WhatAreYou.WhatAreYou.service.MemberService;
-import org.junit.jupiter.api.BeforeEach;
+import com.WhatAreYou.WhatAreYou.repository.file.FileRepository;
+import com.WhatAreYou.WhatAreYou.service.board.BoardService;
+import com.WhatAreYou.WhatAreYou.service.member.MemberService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional

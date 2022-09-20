@@ -1,4 +1,4 @@
-package com.WhatAreYou.WhatAreYou.service;
+package com.WhatAreYou.WhatAreYou.service.file;
 
 import com.WhatAreYou.WhatAreYou.domain.FileEntity;
 import org.springframework.stereotype.Service;

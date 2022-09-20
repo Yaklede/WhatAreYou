@@ -38,4 +38,8 @@ public class Board extends BaseEntity {
         this.member = member;
         this.fileEntities = fileEntities;
     }
+
+    public void addComment(Comment comment) {
+        this.comments.add(comment);
+    }
 }

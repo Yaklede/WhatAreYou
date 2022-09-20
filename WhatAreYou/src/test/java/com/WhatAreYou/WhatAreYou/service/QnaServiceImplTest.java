@@ -2,9 +2,9 @@ package com.WhatAreYou.WhatAreYou.service;
 
 import com.WhatAreYou.WhatAreYou.domain.Member;
 import com.WhatAreYou.WhatAreYou.domain.QnA;
-import com.WhatAreYou.WhatAreYou.repository.MemberRepository;
-import com.WhatAreYou.WhatAreYou.repository.QnaRepository;
-import net.bytebuddy.asm.Advice;
+import com.WhatAreYou.WhatAreYou.repository.member.MemberRepository;
+import com.WhatAreYou.WhatAreYou.repository.qna.QnaRepository;
+import com.WhatAreYou.WhatAreYou.service.qna.QnaService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,8 +13,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -64,12 +62,12 @@ class QnaServiceImplTest {
         //when
         Long questionId = qnaService.question(member.getId(), "질문입니다.");
         //when
-        int count = qnaService.notAnswerCount(questionId);
+        Long count = qnaService.notAnswerCount(questionId);
         Member noAnswer = memberRepository.findById(member.getId()).get();
         Assertions.assertThat(count).isEqualTo(1);
         qnaService.answer(questionId, "대답입니다.");
         //then
-        int answerCount = qnaService.notAnswerCount(questionId);
+        Long answerCount = qnaService.notAnswerCount(questionId);
         Member answer = memberRepository.findById(member.getId()).get();
         Assertions.assertThat(answerCount).isEqualTo(0);
 
