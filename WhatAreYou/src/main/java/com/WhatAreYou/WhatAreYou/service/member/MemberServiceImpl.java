@@ -2,7 +2,7 @@ package com.WhatAreYou.WhatAreYou.service.member;
 
 import com.WhatAreYou.WhatAreYou.domain.Member;
 import com.WhatAreYou.WhatAreYou.dto.MemberUpdateForm;
-import com.WhatAreYou.WhatAreYou.error.ERROR;
+import com.WhatAreYou.WhatAreYou.exception.MemberNotFoundException;
 import com.WhatAreYou.WhatAreYou.exception.NotEnoughStockException;
 import com.WhatAreYou.WhatAreYou.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Member findByOne(Long memberId) {
-        return memberRepository.findById(memberId).orElseThrow(() -> new IllegalArgumentException(ERROR.member));
+        return memberRepository.findById(memberId).orElseThrow(() -> new MemberNotFoundException());
     }
 
     @Override
@@ -69,7 +69,7 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     @Override
     public void update(Long memberId, MemberUpdateForm updateForm) {
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new IllegalArgumentException(ERROR.member));
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new MemberNotFoundException());
         updateMember(member, updateForm);
     }
 

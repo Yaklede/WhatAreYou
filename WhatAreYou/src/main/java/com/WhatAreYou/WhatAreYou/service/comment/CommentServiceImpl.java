@@ -4,11 +4,12 @@ import com.WhatAreYou.WhatAreYou.domain.Board;
 import com.WhatAreYou.WhatAreYou.domain.Comment;
 import com.WhatAreYou.WhatAreYou.domain.Member;
 import com.WhatAreYou.WhatAreYou.dto.CommentUpdateForm;
-import com.WhatAreYou.WhatAreYou.error.ERROR;
+import com.WhatAreYou.WhatAreYou.exception.BoardNotFoundException;
+import com.WhatAreYou.WhatAreYou.exception.CommentNotFoundException;
+import com.WhatAreYou.WhatAreYou.exception.MemberNotFoundException;
 import com.WhatAreYou.WhatAreYou.repository.board.BoardRepository;
 import com.WhatAreYou.WhatAreYou.repository.comment.CommentRepository;
 import com.WhatAreYou.WhatAreYou.repository.member.MemberRepository;
-import com.WhatAreYou.WhatAreYou.service.board.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,8 +28,8 @@ public class CommentServiceImpl implements CommentService {
     private final MemberRepository memberRepository;
     @Override
     public Long create(Long memberId, Long boardId ,String comment) {
-        Board findBoard = boardRepository.findById(boardId).orElseThrow(() -> new IllegalArgumentException(ERROR.board));
-        Member findMember = memberRepository.findById(memberId).orElseThrow(() -> new IllegalArgumentException(ERROR.member));
+        Board findBoard = boardRepository.findById(boardId).orElseThrow(() -> new BoardNotFoundException());
+        Member findMember = memberRepository.findById(memberId).orElseThrow(() -> new MemberNotFoundException());
 
         Comment commentBuild= Comment.builder()
                 .board(findBoard)
@@ -43,13 +44,13 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void update(Long commentId , CommentUpdateForm updateForm) {
-        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new IllegalArgumentException(ERROR.comment));
-        comment.setComment(updateForm.getComment());
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new CommentNotFoundException());
+        comment.changeComment(updateForm.getComment());
     }
 
     @Override
     public void delete(Long commentId) {
-        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new IllegalArgumentException(ERROR.comment));
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new CommentNotFoundException());
         commentRepository.delete(comment);
     }
 

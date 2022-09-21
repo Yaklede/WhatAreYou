@@ -95,4 +95,14 @@ class FollowRepositoryTest {
         //then
 
     }
+    @Test
+    public void findByLoginId() throws Exception {
+        //given
+        followRepository.findAllByLoginId("a");
+        //when
+
+        //then
+
+    }
+
 }

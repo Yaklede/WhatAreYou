@@ -2,6 +2,7 @@ package com.WhatAreYou.WhatAreYou.service;
 
 import com.WhatAreYou.WhatAreYou.domain.Member;
 import com.WhatAreYou.WhatAreYou.dto.MemberUpdateForm;
+import com.WhatAreYou.WhatAreYou.exception.MemberNotFoundException;
 import com.WhatAreYou.WhatAreYou.exception.NotEnoughStockException;
 import com.WhatAreYou.WhatAreYou.repository.member.MemberRepository;
 import com.WhatAreYou.WhatAreYou.service.member.MemberService;
@@ -121,9 +122,7 @@ class MemberServiceTest {
         //when
         memberService.delete(member);
         //then
-        Member findMember = memberService.findByOne(member.getId());
-
-        Assertions.assertThat(findMember).isNull();
+        org.junit.jupiter.api.Assertions.assertThrows(MemberNotFoundException.class, () -> memberService.findByOne(member.getId()));
     }
     @Test
     public void update() throws Exception {

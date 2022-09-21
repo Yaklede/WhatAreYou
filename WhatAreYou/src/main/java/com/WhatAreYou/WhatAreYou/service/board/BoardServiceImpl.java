@@ -2,7 +2,7 @@ package com.WhatAreYou.WhatAreYou.service.board;
 
 import com.WhatAreYou.WhatAreYou.domain.Board;
 import com.WhatAreYou.WhatAreYou.dto.BoardUpdateForm;
-import com.WhatAreYou.WhatAreYou.error.ERROR;
+import com.WhatAreYou.WhatAreYou.exception.BoardNotFoundException;
 import com.WhatAreYou.WhatAreYou.repository.board.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,27 +29,41 @@ public class BoardServiceImpl implements BoardService {
     @Transactional
     @Override
     public void delete(Long boardId) {
-        Board findBoard = boardRepository.findById(boardId).orElseThrow(() -> new IllegalArgumentException(ERROR.board));
+        Board findBoard = boardRepository.findById(boardId).orElseThrow(() -> new BoardNotFoundException());
         boardRepository.delete(findBoard);
     }
 
     @Transactional
     @Override
     public void update(Long boardId,BoardUpdateForm updateForm) {
-        Board findBoard = boardRepository.findById(boardId).orElseThrow(() -> new IllegalArgumentException(ERROR.board));
-        boardUpdate(findBoard, updateForm);
+        Board findBoard = boardRepository.findById(boardId).orElseThrow(() -> new BoardNotFoundException());
+        validationUpdateForm(updateForm, findBoard);
     }
 
-    @Transactional
-    private void boardUpdate(Board findBoard, BoardUpdateForm updateForm) {
-        findBoard.setContent(updateForm.getContent());
-        findBoard.setTitle(updateForm.getTitle());
+    private void validationUpdateForm(BoardUpdateForm updateForm, Board findBoard) {
+        if (updateForm.getTitle() == null || updateForm.getContent() == null) {
+            if (updateForm.getTitle() == null) {
+                BoardUpdateForm updateContent = BoardUpdateForm.builder()
+                        .title(findBoard.getTitle())
+                        .content(updateForm.getContent())
+                        .build();
+                findBoard.changeBoard(updateContent);
+            } else {
+                BoardUpdateForm updateTitle = BoardUpdateForm.builder()
+                        .content(findBoard.getContent())
+                        .title(updateForm.getTitle())
+                        .build();
+                findBoard.changeBoard(updateTitle);
+            }
+        } else {
+            findBoard.changeBoard(updateForm);
+        }
     }
+
 
     @Override
     public Board findByBoardId(Long boardId) {
-
-        return boardRepository.findById(boardId).orElseThrow(() -> new IllegalArgumentException(ERROR.board));
+        return boardRepository.findById(boardId).orElseThrow(() -> new BoardNotFoundException());
     }
 
     @Override

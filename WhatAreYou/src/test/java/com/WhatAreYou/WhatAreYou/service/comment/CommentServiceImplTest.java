@@ -4,7 +4,7 @@ import com.WhatAreYou.WhatAreYou.domain.Board;
 import com.WhatAreYou.WhatAreYou.domain.Comment;
 import com.WhatAreYou.WhatAreYou.domain.Member;
 import com.WhatAreYou.WhatAreYou.dto.CommentUpdateForm;
-import com.WhatAreYou.WhatAreYou.error.ERROR;
+import com.WhatAreYou.WhatAreYou.exception.CommentNotFoundException;
 import com.WhatAreYou.WhatAreYou.repository.board.BoardRepository;
 import com.WhatAreYou.WhatAreYou.repository.comment.CommentRepository;
 import com.WhatAreYou.WhatAreYou.repository.member.MemberRepository;
@@ -35,11 +35,10 @@ class CommentServiceImplTest {
     @Autowired
     CommentRepository commentRepository;
 
-
     @BeforeEach
-    void init() {
-        memberRepository.deleteAll();
+    public void init() {
         boardRepository.deleteAll();
+        memberRepository.deleteAll();
         commentRepository.deleteAll();
     }
 
@@ -66,14 +65,10 @@ class CommentServiceImplTest {
         //then
         org.assertj.core.api.Assertions.assertThat(comment.getComment()).isEqualTo("댓글입니다.");
         commentService.delete(createCommentId);
-        try {
 
-            CommentUpdateForm form = new CommentUpdateForm();
-            form.setComment("a");
-            commentService.update(createCommentId, form);
-        } catch (IllegalArgumentException e) {
-            org.assertj.core.api.Assertions.assertThat(ERROR.comment).isEqualTo(e.getMessage());
-        }
+        CommentUpdateForm form = new CommentUpdateForm();
+        form.setComment("a");
+        org.junit.jupiter.api.Assertions.assertThrows(CommentNotFoundException.class, () -> commentService.update(createCommentId, form));
     }
 
     @Test

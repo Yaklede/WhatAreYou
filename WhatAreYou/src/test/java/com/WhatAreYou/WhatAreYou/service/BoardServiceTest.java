@@ -2,6 +2,7 @@ package com.WhatAreYou.WhatAreYou.service;
 
 import com.WhatAreYou.WhatAreYou.domain.Board;
 import com.WhatAreYou.WhatAreYou.domain.Member;
+import com.WhatAreYou.WhatAreYou.dto.BoardUpdateForm;
 import com.WhatAreYou.WhatAreYou.repository.board.BoardRepository;
 import com.WhatAreYou.WhatAreYou.service.board.BoardService;
 import com.WhatAreYou.WhatAreYou.service.member.MemberService;
@@ -51,6 +52,29 @@ class BoardServiceTest {
         Board findBoard = boardService.findByBoardId(createBoardId);
 
         Assertions.assertThat(board.getTitle()).isEqualTo(findBoard.getTitle());
+    }
+
+    @Test
+    public void boardUpdate() throws Exception {
+        //given
+        Member findMember = memberService.findByLoginId("test");
+        Board board = Board.builder()
+                .member(findMember)
+                .content("content")
+                .title("title")
+                .build();
+        Long createBoardId = boardService.create(board);
+        //when
+        BoardUpdateForm updateForm = BoardUpdateForm.builder()
+                .content("content2")
+                .title(null)
+                .build();
+        //then
+        boardService.update(createBoardId,updateForm);
+        Board updateBoard = boardService.findByBoardId(createBoardId);
+        Assertions.assertThat(updateBoard.getContent()).isEqualTo("content2");
+        Assertions.assertThat(updateBoard.getTitle()).isEqualTo("title");
+
     }
 
 

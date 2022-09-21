@@ -2,10 +2,10 @@ package com.WhatAreYou.WhatAreYou.service.qna;
 
 import com.WhatAreYou.WhatAreYou.domain.Member;
 import com.WhatAreYou.WhatAreYou.domain.QnA;
-import com.WhatAreYou.WhatAreYou.error.ERROR;
+import com.WhatAreYou.WhatAreYou.exception.MemberNotFoundException;
+import com.WhatAreYou.WhatAreYou.exception.QnaNotFoundException;
 import com.WhatAreYou.WhatAreYou.repository.member.MemberRepository;
 import com.WhatAreYou.WhatAreYou.repository.qna.QnaRepository;
-import com.WhatAreYou.WhatAreYou.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,7 +26,7 @@ public class QnaServiceImpl implements QnaService {
     @Transactional
     @Override
     public Long question(Long memberId, String question) {
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new IllegalArgumentException(ERROR.member));
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new MemberNotFoundException());
         QnA qnA = QnA.builder()
                 .member(member)
                 .questions(question)
@@ -38,7 +38,7 @@ public class QnaServiceImpl implements QnaService {
     @Transactional
     @Override
     public Long answer(Long qnaId, String answer) {
-        QnA findQna = qnaRepository.findById(qnaId).orElseThrow(() -> new IllegalArgumentException(ERROR.q));
+        QnA findQna = qnaRepository.findById(qnaId).orElseThrow(() -> new QnaNotFoundException());
         findQna.setAnswers(answer);
         return findQna.getId();
     }

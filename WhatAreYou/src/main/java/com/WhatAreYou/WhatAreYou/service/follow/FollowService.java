@@ -7,9 +7,12 @@ import java.util.List;
 
 @Service
 public interface FollowService {
-    public List<Follow> followList(Long loginId, Long pageMemberId);
+    public List<Follow> followList(String loginId);
 
     public Long follow(Long fromMemberId, Long toMemberId);
 
     public Long unfollow(Long fromMemberId, Long toMemberId);
+
+    public Long followState(Long loginId, Long pageMemberId);
+
 }

@@ -1,7 +1,7 @@
 package com.WhatAreYou.WhatAreYou.service.file;
 
 import com.WhatAreYou.WhatAreYou.domain.FileEntity;
-import com.WhatAreYou.WhatAreYou.error.ERROR;
+import com.WhatAreYou.WhatAreYou.exception.FileNotFoundException;
 import com.WhatAreYou.WhatAreYou.repository.file.FileRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,7 +41,7 @@ public class FileServiceImpl implements FileService {
     @Override
     public Long
     updateFile(FileEntity updateFile, MultipartFile multipartFile) throws IOException {
-        FileEntity findFile = fileRepository.findById(updateFile.getId()).orElseThrow(() -> new IllegalArgumentException(ERROR.file));
+        FileEntity findFile = fileRepository.findById(updateFile.getId()).orElseThrow(() -> new FileNotFoundException());
         updateFile(multipartFile, findFile);
         multipartFile.transferTo(new File(findFile.getSavePath()));
         return null;
@@ -49,7 +49,7 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public FileEntity findByOne(Long fileEntityId) {
-        return fileRepository.findById(fileEntityId).orElseThrow(() -> new IllegalArgumentException(ERROR.file));
+        return fileRepository.findById(fileEntityId).orElseThrow(() -> new FileNotFoundException());
     }
 
     @Override

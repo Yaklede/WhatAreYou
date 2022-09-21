@@ -1,6 +1,7 @@
 package com.WhatAreYou.WhatAreYou.domain;
 
 import com.WhatAreYou.WhatAreYou.base.BaseEntity;
+import com.WhatAreYou.WhatAreYou.dto.BoardUpdateForm;
 import lombok.*;
 
 import javax.persistence.*;
@@ -9,7 +10,6 @@ import java.util.List;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Board extends BaseEntity {
     @Id
@@ -41,5 +41,10 @@ public class Board extends BaseEntity {
 
     public void addComment(Comment comment) {
         this.comments.add(comment);
+    }
+
+    public void changeBoard(BoardUpdateForm form) {
+        this.title = form.getTitle();
+        this.content = form.getContent();
     }
 }
