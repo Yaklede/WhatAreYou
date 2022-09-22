@@ -1,7 +1,7 @@
 package com.WhatAreYou.WhatAreYou.service.member;
 
 import com.WhatAreYou.WhatAreYou.domain.Member;
-import com.WhatAreYou.WhatAreYou.dto.MemberUpdateForm;
+import com.WhatAreYou.WhatAreYou.dto.form.MemberUpdateForm;
 import com.WhatAreYou.WhatAreYou.exception.MemberNotFoundException;
 import com.WhatAreYou.WhatAreYou.exception.NotEnoughStockException;
 import com.WhatAreYou.WhatAreYou.repository.member.MemberRepository;
@@ -70,15 +70,17 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void update(Long memberId, MemberUpdateForm updateForm) {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new MemberNotFoundException());
-        updateMember(member, updateForm);
+        validationUpdate(updateForm, member);
+
     }
 
-    private void updateMember(Member member, MemberUpdateForm updateForm) {
-        member.setNickName(updateForm.getNickName());
-        member.setPassword(updateForm.getPassword());
-        member.setAge(updateForm.getAge());
-        member.setEmail(updateForm.getEmail());
+    private void validationUpdate(MemberUpdateForm updateForm, Member member) {
+        if (updateForm.getPassword().isEmpty() || updateForm.getPassword() == null) {
+            updateForm.setPassword(member.getPassword());
+        } else if (updateForm.getEmail().isEmpty() || updateForm.getEmail() == null) {
+            updateForm.setEmail(member.getEmail());
+        } else if (updateForm.getNickName().isEmpty() || updateForm.getNickName() == null) {
+            updateForm.setNickName(member.getNickName());
+        }
     }
-
-
 }

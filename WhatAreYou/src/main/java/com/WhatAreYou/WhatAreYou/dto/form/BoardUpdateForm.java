@@ -1,4 +1,4 @@
-package com.WhatAreYou.WhatAreYou.dto;
+package com.WhatAreYou.WhatAreYou.dto.form;
 
 import lombok.Builder;
 import lombok.Data;

@@ -1,7 +1,7 @@
 package com.WhatAreYou.WhatAreYou.service.board;
 
 import com.WhatAreYou.WhatAreYou.domain.Board;
-import com.WhatAreYou.WhatAreYou.dto.BoardUpdateForm;
+import com.WhatAreYou.WhatAreYou.dto.form.BoardUpdateForm;
 import com.WhatAreYou.WhatAreYou.exception.BoardNotFoundException;
 import com.WhatAreYou.WhatAreYou.repository.board.BoardRepository;
 import lombok.RequiredArgsConstructor;

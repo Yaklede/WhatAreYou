@@ -1,7 +1,7 @@
 package com.WhatAreYou.WhatAreYou.domain;
 
 import com.WhatAreYou.WhatAreYou.base.BaseEntity;
-import com.WhatAreYou.WhatAreYou.dto.BoardUpdateForm;
+import com.WhatAreYou.WhatAreYou.dto.form.BoardUpdateForm;
 import lombok.*;
 
 import javax.persistence.*;

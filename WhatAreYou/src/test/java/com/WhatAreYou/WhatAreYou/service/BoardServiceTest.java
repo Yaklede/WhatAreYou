@@ -2,7 +2,7 @@ package com.WhatAreYou.WhatAreYou.service;
 
 import com.WhatAreYou.WhatAreYou.domain.Board;
 import com.WhatAreYou.WhatAreYou.domain.Member;
-import com.WhatAreYou.WhatAreYou.dto.BoardUpdateForm;
+import com.WhatAreYou.WhatAreYou.dto.form.BoardUpdateForm;
 import com.WhatAreYou.WhatAreYou.repository.board.BoardRepository;
 import com.WhatAreYou.WhatAreYou.service.board.BoardService;
 import com.WhatAreYou.WhatAreYou.service.member.MemberService;

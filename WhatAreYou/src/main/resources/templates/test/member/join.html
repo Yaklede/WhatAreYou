@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입</title>
+    <style>
+        .field-error {
+        border-color: #dc3545;
+        color: #dc3545;
+        }
+        </style>
+</head>
+<body>
+    <div class="text-center mt-4">
+        <span class="field-error" th:if="${message == '이미 존재하는 회원입니다.'}">이미 존재하는 회원입니다.</span>
+        <h1 class="h2">Sign Up</h1>
+        <p class="lead">
+            Start creating your Id
+        </p>
+    </div>
+    <form th:action="@{/test/member/join}" method="post" th:object="${joinForm}">
+        <div>
+            <label for="id">아이디</label>
+            <input th:field="*{loginId}" th:errorclass="field-error" id="id" type="text">
+            <div class="field-error" th:errors="*{loginId}"></div>
+        </div>
+        <div>
+            <label for="password">패스워드</label>
+            <input th:field="*{password}" id="password" th:errorclass="field-error" type="password">
+            <div class="field-error" th:errors="*{password}"></div>
+        </div>
+        <div>
+            <label for="nick">닉네임</label>
+            <input th:field="*{nickName}" th:errorclass="field-error" id="nick" type="text">
+            <div class="field-error" th:errors="*{nickName}"></div>
+        </div>
+        <div>
+            <label for="email">email</label>
+            <input th:field="*{email}" th:errorclass="field-error" id="email" type="email">
+            <div class="field-error" th:errors="*{email}"></div>
+        </div>
+        <div>
+            <label for="age">나이</label>
+            <input th:field="*{age}" th:errorclass="field-error" id="age" type="text">
+            <div class="field-error" th:errors="*{age}"></div>
+        </div>
+        <div>
+            <input type="submit">
+        </div>
+    </form>
+</body>
+</html>

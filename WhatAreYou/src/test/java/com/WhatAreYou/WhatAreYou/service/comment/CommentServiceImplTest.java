@@ -3,7 +3,7 @@ package com.WhatAreYou.WhatAreYou.service.comment;
 import com.WhatAreYou.WhatAreYou.domain.Board;
 import com.WhatAreYou.WhatAreYou.domain.Comment;
 import com.WhatAreYou.WhatAreYou.domain.Member;
-import com.WhatAreYou.WhatAreYou.dto.CommentUpdateForm;
+import com.WhatAreYou.WhatAreYou.dto.form.CommentUpdateForm;
 import com.WhatAreYou.WhatAreYou.exception.CommentNotFoundException;
 import com.WhatAreYou.WhatAreYou.repository.board.BoardRepository;
 import com.WhatAreYou.WhatAreYou.repository.comment.CommentRepository;
@@ -15,7 +15,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 

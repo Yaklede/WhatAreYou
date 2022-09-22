@@ -1,5 +1,6 @@
 package com.WhatAreYou.WhatAreYou.domain;
 
+import com.WhatAreYou.WhatAreYou.dto.form.MemberUpdateForm;
 import lombok.*;
 
 import javax.persistence.*;
@@ -44,6 +45,13 @@ public class Member {
         this.nickName = nickName;
         this.email = email;
         this.age = age;
+    }
+
+    public void updateMember(MemberUpdateForm updateForm) {
+        this.password = updateForm.getPassword();
+        this.nickName = updateForm.getNickName();
+        this.age = updateForm.getAge();
+        this.email = updateForm.getEmail();
     }
 
 }
