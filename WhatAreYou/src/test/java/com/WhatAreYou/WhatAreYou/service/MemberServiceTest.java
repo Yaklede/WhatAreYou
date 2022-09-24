@@ -1,7 +1,7 @@
 package com.WhatAreYou.WhatAreYou.service;
 
 import com.WhatAreYou.WhatAreYou.domain.Member;
-import com.WhatAreYou.WhatAreYou.dto.form.MemberUpdateForm;
+import com.WhatAreYou.WhatAreYou.dto.form.member.MemberUpdateForm;
 import com.WhatAreYou.WhatAreYou.exception.MemberNotFoundException;
 import com.WhatAreYou.WhatAreYou.exception.NotEnoughStockException;
 import com.WhatAreYou.WhatAreYou.repository.member.MemberRepository;

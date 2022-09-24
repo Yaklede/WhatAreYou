@@ -1,6 +1,7 @@
 package com.WhatAreYou.WhatAreYou.domain;
 
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 
@@ -22,8 +23,7 @@ public class FileEntity {
     //파일 저장 경로
     private String savePath;
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    @JoinColumn(name = "board_id")
+    @OneToOne(mappedBy = "fileEntity")
     private Board board;
 
     @Builder

@@ -1,10 +1,9 @@
 package com.WhatAreYou.WhatAreYou.domain;
 
-import com.WhatAreYou.WhatAreYou.dto.form.MemberUpdateForm;
+import com.WhatAreYou.WhatAreYou.dto.form.member.MemberUpdateForm;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;

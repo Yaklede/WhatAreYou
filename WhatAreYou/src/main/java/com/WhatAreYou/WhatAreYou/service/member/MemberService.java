@@ -1,7 +1,7 @@
 package com.WhatAreYou.WhatAreYou.service.member;
 
 import com.WhatAreYou.WhatAreYou.domain.Member;
-import com.WhatAreYou.WhatAreYou.dto.form.MemberUpdateForm;
+import com.WhatAreYou.WhatAreYou.dto.form.member.MemberUpdateForm;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

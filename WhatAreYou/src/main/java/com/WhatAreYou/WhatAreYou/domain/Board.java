@@ -1,7 +1,7 @@
 package com.WhatAreYou.WhatAreYou.domain;
 
 import com.WhatAreYou.WhatAreYou.base.BaseEntity;
-import com.WhatAreYou.WhatAreYou.dto.form.BoardUpdateForm;
+import com.WhatAreYou.WhatAreYou.dto.form.board.BoardUpdateForm;
 import lombok.*;
 
 import javax.persistence.*;
@@ -28,15 +28,16 @@ public class Board extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany(mappedBy = "board")
-    private List<FileEntity> fileEntities = new ArrayList<>();
+    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @JoinColumn(name = "file_id")
+    private FileEntity fileEntity;
 
     @Builder
-    public Board(String title, String content, Member member, List<FileEntity> fileEntities) {
+    public Board(String title, String content, Member member, FileEntity fileEntity) {
         this.title = title;
         this.content = content;
         this.member = member;
-        this.fileEntities = fileEntities;
+        this.fileEntity = fileEntity;
     }
 
     public void addComment(Comment comment) {

@@ -1,7 +1,7 @@
 package com.WhatAreYou.WhatAreYou.service.board;
 
 import com.WhatAreYou.WhatAreYou.domain.Board;
-import com.WhatAreYou.WhatAreYou.dto.form.BoardUpdateForm;
+import com.WhatAreYou.WhatAreYou.dto.form.board.BoardUpdateForm;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

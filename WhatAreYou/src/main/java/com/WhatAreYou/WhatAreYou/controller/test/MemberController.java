@@ -1,15 +1,14 @@
 package com.WhatAreYou.WhatAreYou.controller.test;
 
 import com.WhatAreYou.WhatAreYou.domain.Member;
-import com.WhatAreYou.WhatAreYou.dto.form.JoinForm;
-import com.WhatAreYou.WhatAreYou.dto.form.LoginForm;
-import com.WhatAreYou.WhatAreYou.dto.form.MemberDeleteForm;
-import com.WhatAreYou.WhatAreYou.dto.form.MemberUpdateForm;
+import com.WhatAreYou.WhatAreYou.dto.form.member.JoinForm;
+import com.WhatAreYou.WhatAreYou.dto.form.member.LoginForm;
+import com.WhatAreYou.WhatAreYou.dto.form.member.MemberDeleteForm;
+import com.WhatAreYou.WhatAreYou.dto.form.member.MemberUpdateForm;
 import com.WhatAreYou.WhatAreYou.exception.NotEnoughStockException;
 import com.WhatAreYou.WhatAreYou.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.jmx.export.annotation.ManagedOperation;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;

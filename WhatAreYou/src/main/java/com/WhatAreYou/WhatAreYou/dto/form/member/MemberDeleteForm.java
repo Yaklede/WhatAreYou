@@ -1,4 +1,4 @@
-package com.WhatAreYou.WhatAreYou.dto.form;
+package com.WhatAreYou.WhatAreYou.dto.form.member;
 
 import com.WhatAreYou.WhatAreYou.domain.Member;
 import lombok.Data;
