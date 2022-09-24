@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<h1>팔로우 수 :<span th:text="${followCount}"></span> </h1>
+<div th:each="member : ${members}">
+
+    <form th:if="${member.followState} == 0" th:action="@{/test/member/follow/{memberId} (memberId = ${member.id})}" method="post">
+        <h5>내가 팔로우 하지 않은 회원</h5>
+        <div>
+            <span th:text="${member.nickName}">회원 닉네임</span>
+            <button type="submit">팔로우</button>
+        </div>
+    </form>
+
+    <form th:if="${member.followState} == 1" th:action="@{/test/member/unfollow/{memberId} (memberId = ${member.id})}" method="post">
+        <h5>내가 팔로우 한 회원</h5>
+        <div>
+            <span th:text="${member.nickName}">회원 닉네임</span>
+            <button type="submit">언팔로우</button>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>

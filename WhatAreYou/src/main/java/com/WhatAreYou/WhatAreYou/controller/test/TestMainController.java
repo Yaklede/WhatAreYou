@@ -11,11 +11,15 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
+import javax.annotation.PostConstruct;
+
 @Controller
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/test")
 public class TestMainController {
+
+
 
     @GetMapping("")
     public String MainTestPage(){
@@ -29,7 +33,6 @@ public class TestMainController {
 
     @GetMapping("/board")
     public String boardTestPage(@SessionAttribute(name = "loginMember",required = false) Member loginMember, Model model) {
-
         if (loginMember == null) {
             return "redirect:/test/member";
         }

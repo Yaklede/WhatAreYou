@@ -23,9 +23,16 @@ public class FollowServiceImpl implements FollowService {
     private final MemberRepository memberRepository;
 
     @Override
-    public List<Follow> followList(String loginId) {
-        return followRepository.findAllByLoginId(loginId);
+    public List<Follow> followList(Member toMember) {
+        return followRepository.mFollowList(toMember);
     }
+
+
+    @Override
+    public Long followCount(Member fromMember) {
+        return followRepository.mFollowCount(fromMember);
+    }
+
     @Transactional
     @Override
     public Long follow(Long fromMemberId, Long toMemberId) {

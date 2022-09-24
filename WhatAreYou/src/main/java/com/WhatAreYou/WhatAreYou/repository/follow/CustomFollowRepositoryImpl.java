@@ -2,12 +2,17 @@ package com.WhatAreYou.WhatAreYou.repository.follow;
 
 import com.WhatAreYou.WhatAreYou.domain.Follow;
 import com.WhatAreYou.WhatAreYou.domain.Member;
+import com.WhatAreYou.WhatAreYou.domain.QMember;
+import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.EntityManager;
 
+import java.util.List;
+
 import static com.WhatAreYou.WhatAreYou.domain.QFollow.*;
+import static com.WhatAreYou.WhatAreYou.domain.QMember.*;
 
 public class CustomFollowRepositoryImpl implements CustomFollowRepository {
 
@@ -62,9 +67,18 @@ public class CustomFollowRepositoryImpl implements CustomFollowRepository {
          return  queryFactory
                 .select(follow.count())
                 .where(
-                        follow.fromMember.eq(member)
+                        follow.toMember.eq(member)
                 )
                 .from(follow)
                 .fetchOne();
     }
+
+    @Override
+    public List<Follow> mFollowList(Member toMember) {
+        return queryFactory
+                .selectFrom(follow)
+                .where(follow.toMember.eq(toMember))
+                .fetch();
+    }
+
 }

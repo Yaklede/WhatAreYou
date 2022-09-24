@@ -49,7 +49,7 @@ class FollowServiceImplTest {
                 followService.follow(member1.getId(), member.getId());
             }
         }
-        List<Follow> follows = followService.followList(member1.getLoginId());
+        List<Follow> follows = followService.followList(member1);
         for (Follow follow : follows) {
             System.out.println("follow = " + follow.getToMember().getLoginId());
         }

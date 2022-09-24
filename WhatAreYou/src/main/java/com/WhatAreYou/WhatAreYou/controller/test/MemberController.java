@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -27,6 +28,20 @@ import java.util.stream.Collectors;
 public class MemberController {
 
     private final MemberService memberService;
+
+    @PostConstruct
+    public void init() {
+        for (int i = 0; i < 30; i++) {
+            Member member = Member.builder()
+                    .nickName("닉네임" + i)
+                    .age(i)
+                    .email("EmailNumber" + i + "@gmail.com")
+                    .password("pass" + i)
+                    .loginId("loginId" + i)
+                    .build();
+            memberService.join(member);
+        }
+    }
 
     @GetMapping("/join")
     public String GetJoin(@ModelAttribute("joinForm") JoinForm joinForm) {

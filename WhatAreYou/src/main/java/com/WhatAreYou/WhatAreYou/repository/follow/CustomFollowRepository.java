@@ -1,7 +1,10 @@
 package com.WhatAreYou.WhatAreYou.repository.follow;
 
+import com.WhatAreYou.WhatAreYou.domain.Follow;
 import com.WhatAreYou.WhatAreYou.domain.Member;
 import org.springframework.data.jpa.repository.Modifying;
+
+import java.util.List;
 
 public interface CustomFollowRepository {
 
@@ -13,4 +16,7 @@ public interface CustomFollowRepository {
 
     Long mFollowCount(Member member);
     //int 0 = false (팔로우 안됌) , int 1 = ture(팔로우됌);
+
+    List<Follow> mFollowList(Member toMember);
+
 }
