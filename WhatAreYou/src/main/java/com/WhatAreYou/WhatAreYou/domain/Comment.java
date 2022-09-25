@@ -17,7 +17,7 @@ public class Comment extends BaseEntity {
     @Column(name = "comment_id")
     private Long id;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String comment;
 
     @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)

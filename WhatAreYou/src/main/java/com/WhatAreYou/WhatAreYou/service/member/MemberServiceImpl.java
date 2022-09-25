@@ -77,10 +77,13 @@ public class MemberServiceImpl implements MemberService {
     private void validationUpdate(MemberUpdateForm updateForm, Member member) {
         if (updateForm.getPassword().isEmpty() || updateForm.getPassword() == null) {
             updateForm.setPassword(member.getPassword());
+            member.updateMember(updateForm);
         } else if (updateForm.getEmail().isEmpty() || updateForm.getEmail() == null) {
             updateForm.setEmail(member.getEmail());
+            member.updateMember(updateForm);
         } else if (updateForm.getNickName().isEmpty() || updateForm.getNickName() == null) {
             updateForm.setNickName(member.getNickName());
-        }
+            member.updateMember(updateForm);
+        } else member.updateMember(updateForm);
     }
 }

@@ -60,7 +60,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Comment findByMemberId(Long memberId) {
+    public List<Comment> findByMemberId(Long memberId) {
         return commentRepository.findByMemberId(memberId);
     }
 

@@ -17,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 
 @SpringBootTest
 @Transactional
@@ -130,7 +132,8 @@ class CommentServiceImplTest {
         commentService.create(member2.getId(), board.getId(), "두번째 댓글");
         //then
 
-        Comment member2Comment = commentService.findByMemberId(member2.getId());
+        List<Comment> byMemberId = commentService.findByMemberId(member2.getId());
+        Comment member2Comment = (Comment) byMemberId;
         Assertions.assertThat(board.getComments().size()).isEqualTo(2);
         Assertions.assertThat(member2Comment.getMember()).isEqualTo(member2);
         Assertions.assertThat(member2Comment.getComment()).isEqualTo("두번째 댓글");

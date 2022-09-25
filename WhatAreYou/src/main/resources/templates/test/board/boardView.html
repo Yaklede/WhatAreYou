@@ -30,17 +30,18 @@
             <label th:for="content">Content</label>
             <span th:text="${board.content}" th:inline="text" type="text" cols="30" rows="10" placeholder="enter your Book Story" class="form-control" readonly></span>
         </div>
-        <form method="post" th:action="@{/test/board/comment/{boardId}/{memberId} (boardId = ${board.id} , memberId = ${board.member.id})}">
+        <form method="post" th:action="@{/test/board/comment/{boardId}/{memberId} (boardId = ${board.id} , memberId = ${member.id})}">
             <div th:object="${commentForm}" class="form-group">
                 <label th:for="commentInput">Comment Input</label>
                 <input th:field="*{commentInput}" type="text"/>
+                <div class="field-error" th:errors="*{commentInput}"></div>
             </div>
             <input type="submit"/>
         </form>
         <div th:each="comment : ${boardComments}" class="form-group">
-            <label th:for="comment">Comment</label>
-            <span th:text="${comment.member.nickName}"  type="text" placeholder="enter your Book Title" class="form-control" readonly></span>
-            <span th:text="${comment.comment}"  type="text" placeholder="enter your Book Title" class="form-control" readonly></span>
+            <label th:for="comment">댓글 : </label>
+            <span th:text="${comment.member.nickName}"  type="text"  class="form-control" readonly></span>
+            <span th:text="${comment.comment}" type="text"  class="form-control" readonly></span>
         </div>
 
     </div>

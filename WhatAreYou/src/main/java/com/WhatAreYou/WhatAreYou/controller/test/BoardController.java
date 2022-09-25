@@ -6,6 +6,8 @@ import com.WhatAreYou.WhatAreYou.domain.FileEntity;
 import com.WhatAreYou.WhatAreYou.domain.Member;
 import com.WhatAreYou.WhatAreYou.dto.form.CommentForm;
 import com.WhatAreYou.WhatAreYou.dto.form.board.BoardForm;
+import com.WhatAreYou.WhatAreYou.dto.form.member.LoginForm;
+import com.WhatAreYou.WhatAreYou.exception.CommentNotFoundException;
 import com.WhatAreYou.WhatAreYou.service.board.BoardService;
 import com.WhatAreYou.WhatAreYou.service.comment.CommentService;
 import com.WhatAreYou.WhatAreYou.service.file.FileService;
@@ -59,26 +61,35 @@ public class BoardController {
     }
 
     @GetMapping("/boards")
-    public String boardsView(Model model) {
+    public String boardsView(@SessionAttribute("loginMember") Member loginMember, Model model) {
         List<Board> boards = boardService.findAll();
         model.addAttribute("boards", boards);
+        model.addAttribute("member", loginMember);
         return "/test/board/boardList";
     }
 
     @GetMapping("/comment/{boardId}/{memberId}")
     public String boardView(@ModelAttribute("commentForm") CommentForm commentForm,@PathVariable("boardId") Long boardId, @PathVariable("memberId") Long memberId,Model model) {
         Board board = boardService.findByBoardId(boardId);
+        Member loginMember = memberService.findByOne(memberId);
         List<Comment> boardComments = commentService.findByBoardId(boardId);
+        model.addAttribute("member", loginMember);
         model.addAttribute("board", board);
         model.addAttribute("boardComments", boardComments);
         return "test/board/boardView";
     }
 
     @PostMapping("/comment/{boardId}/{memberId}")
-    public String boardCreateComment(@ModelAttribute("commentForm") CommentForm commentForm,@PathVariable("boardId") Long boardId, @PathVariable("memberId") Long memberId) {
+    public String boardCreateComment(@Valid @ModelAttribute("commentForm") CommentForm commentForm, BindingResult bindingResult, @PathVariable("boardId") Long boardId, @PathVariable("memberId") Long memberId,Model model) {
+        if (bindingResult.hasErrors()) {
+            List<Comment> boardComments = commentService.findByBoardId(boardId);
+            Board board = boardService.findByBoardId(boardId);
+            model.addAttribute("board", board);
+            model.addAttribute("boardComments", boardComments);
+            return "/test/board/boardView";
+        }
         commentService.create(memberId, boardId, commentForm.getCommentInput());
-        log.info("comment = {}", commentService.findByMemberId(memberId));
-        return "redirect:/test/board";
+        return "redirect:/test/board/comment/{boardId}/{memberId}";
     }
 
 
