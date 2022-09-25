@@ -17,5 +17,7 @@ public interface CommentService {
 
     public List<Comment> findAll();
 
-    public Comment findByMemberId(Long commentId);
+    public Comment findByMemberId(Long memberId);
+
+    public List<Comment> findByBoardId(Long boardId);
 }

@@ -13,6 +13,4 @@ public class LoginForm {
     private String nickName;
     private String email;
     private int age;
-
-
 }

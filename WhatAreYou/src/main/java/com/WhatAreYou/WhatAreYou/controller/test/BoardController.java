@@ -1,10 +1,13 @@
 package com.WhatAreYou.WhatAreYou.controller.test;
 
 import com.WhatAreYou.WhatAreYou.domain.Board;
+import com.WhatAreYou.WhatAreYou.domain.Comment;
 import com.WhatAreYou.WhatAreYou.domain.FileEntity;
 import com.WhatAreYou.WhatAreYou.domain.Member;
+import com.WhatAreYou.WhatAreYou.dto.form.CommentForm;
 import com.WhatAreYou.WhatAreYou.dto.form.board.BoardForm;
 import com.WhatAreYou.WhatAreYou.service.board.BoardService;
+import com.WhatAreYou.WhatAreYou.service.comment.CommentService;
 import com.WhatAreYou.WhatAreYou.service.file.FileService;
 import com.WhatAreYou.WhatAreYou.service.like.LikeService;
 import com.WhatAreYou.WhatAreYou.service.member.MemberService;
@@ -29,6 +32,7 @@ import java.util.List;
 public class BoardController {
     private final MemberService memberService;
     private final BoardService boardService;
+    private final CommentService commentService;
     private final FileService fileService;
     private final LikeService likeService;
 
@@ -55,10 +59,26 @@ public class BoardController {
     }
 
     @GetMapping("/boards")
-    public String boardView(Model model) {
+    public String boardsView(Model model) {
         List<Board> boards = boardService.findAll();
         model.addAttribute("boards", boards);
-        return "/test/board/boardView";
+        return "/test/board/boardList";
+    }
+
+    @GetMapping("/comment/{boardId}/{memberId}")
+    public String boardView(@ModelAttribute("commentForm") CommentForm commentForm,@PathVariable("boardId") Long boardId, @PathVariable("memberId") Long memberId,Model model) {
+        Board board = boardService.findByBoardId(boardId);
+        List<Comment> boardComments = commentService.findByBoardId(boardId);
+        model.addAttribute("board", board);
+        model.addAttribute("boardComments", boardComments);
+        return "test/board/boardView";
+    }
+
+    @PostMapping("/comment/{boardId}/{memberId}")
+    public String boardCreateComment(@ModelAttribute("commentForm") CommentForm commentForm,@PathVariable("boardId") Long boardId, @PathVariable("memberId") Long memberId) {
+        commentService.create(memberId, boardId, commentForm.getCommentInput());
+        log.info("comment = {}", commentService.findByMemberId(memberId));
+        return "redirect:/test/board";
     }
 
 

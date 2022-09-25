@@ -37,7 +37,6 @@ public class CommentServiceImpl implements CommentService {
                 .comment(comment)
                 .build();
 
-        findBoard.addComment(commentBuild);
         commentRepository.save(commentBuild);
         return commentBuild.getId();
     }
@@ -63,5 +62,10 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public Comment findByMemberId(Long memberId) {
         return commentRepository.findByMemberId(memberId);
+    }
+
+    @Override
+    public List<Comment> findByBoardId(Long boardId) {
+        return commentRepository.findByBoardId(boardId);
     }
 }

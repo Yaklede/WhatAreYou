@@ -37,8 +37,8 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<Board> boardList = new ArrayList<>();
 
+    @Transient
     private Long followState;
-
 
     @Builder
     public Member(@NotEmpty String loginId, @NotEmpty String password, @NotEmpty String nickName, @NotEmpty String email, @NotEmpty int age) {
