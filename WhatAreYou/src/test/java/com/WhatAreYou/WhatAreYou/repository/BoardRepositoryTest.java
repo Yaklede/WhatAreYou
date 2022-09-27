@@ -32,6 +32,5 @@ class BoardRepositoryTest {
         //when
 
         //then
-
     }
 }

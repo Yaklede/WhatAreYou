@@ -8,23 +8,18 @@
 </head>
 <body>
 <h1>팔로우 수 :<span th:text="${followCount}"></span> </h1>
+<h5>내가 팔로우 테스트 리스트</h5>
 <div th:each="member : ${members}">
-
-    <form th:if="${member.followState} == 0" th:action="@{/test/member/follow/{memberId} (memberId = ${member.id})}" method="post">
-        <h5>내가 팔로우 하지 않은 회원</h5>
         <div>
             <span th:text="${member.nickName}">회원 닉네임</span>
-            <button type="submit">팔로우</button>
+            <form th:if="${member.followState} == 0" th:action="@{/test/member/follow/{memberId} (memberId = ${member.id})}" method="post">
+                <button type="submit">팔로우</button>
+            </form>
+            <form th:if="${member.followState} == 1" th:action="@{/test/member/unfollow/{memberId} (memberId = ${member.id})}" method="post">
+                <button type="submit">언팔로우</button>
+            </form>
         </div>
-    </form>
 
-    <form th:if="${member.followState} == 1" th:action="@{/test/member/unfollow/{memberId} (memberId = ${member.id})}" method="post">
-        <h5>내가 팔로우 한 회원</h5>
-        <div>
-            <span th:text="${member.nickName}">회원 닉네임</span>
-            <button type="submit">언팔로우</button>
-        </div>
-    </form>
 </div>
 
 </body>

@@ -30,7 +30,7 @@
             <label th:for="content">Content</label>
             <span th:text="${board.content}" th:inline="text" type="text" cols="30" rows="10" placeholder="enter your Book Story" class="form-control" readonly></span>
         </div>
-        <form th:action="@{/test/board/comment/{boardId}/{memberId} (boardId = ${board.id} , memberId = ${member.id})}">
+        <form th:action="@{/test/board/boardDetail/{boardId}/{memberId} (boardId = ${board.id} , memberId = ${member.id})}">
             <div class="form-group">
                 <label th:for="commentInput">Board In View</label>
                 <button type="submit">게시글 보기</button>

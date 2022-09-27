@@ -14,4 +14,5 @@ public interface BoardService {
     public Board findByBoardId(Long boardId);
     public List<Board> findAll();
     public List<Board> findAllByMemberId(Long memberId);
+
 }

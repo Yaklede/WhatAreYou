@@ -13,7 +13,7 @@
             <div class="form-group">
                 <label th:for="loginId">작성자</label>
                 <input th:field="*{loginId}" th:errorclass="field-error" type="text" placeholder="enter your Book Title" class="form-control" readonly>
-                <div class="field-error" th:errors="*{title}"></div>
+                <div class="field-error" th:errors="*{loginId}"></div>
             </div>
             <div class="form-group">
                 <label th:for="title">Title</label>
@@ -22,7 +22,7 @@
             </div>
             <div class="form-group">
                 <label th:for="img">Img</label>
-                <input th:field=*{file} type="file" name="file" class="form-control">
+                <input type= "file" name="file" class="form-control">
             </div>
             <div class="form-group">
                 <label th:for="content">Content</label>

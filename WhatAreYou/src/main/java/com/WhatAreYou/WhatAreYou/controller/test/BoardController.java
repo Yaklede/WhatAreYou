@@ -5,6 +5,7 @@ import com.WhatAreYou.WhatAreYou.domain.Comment;
 import com.WhatAreYou.WhatAreYou.domain.FileEntity;
 import com.WhatAreYou.WhatAreYou.domain.Member;
 import com.WhatAreYou.WhatAreYou.dto.form.CommentForm;
+import com.WhatAreYou.WhatAreYou.dto.form.LikeForm;
 import com.WhatAreYou.WhatAreYou.dto.form.board.BoardForm;
 import com.WhatAreYou.WhatAreYou.dto.form.member.LoginForm;
 import com.WhatAreYou.WhatAreYou.exception.CommentNotFoundException;
@@ -17,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.jmx.export.annotation.ManagedOperation;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -56,7 +59,6 @@ public class BoardController {
             return "/test/board/create";
         }
         createBoard(loginId, form);
-
         return "redirect:/test/";
     }
 
@@ -68,15 +70,34 @@ public class BoardController {
         return "/test/board/boardList";
     }
 
-    @GetMapping("/comment/{boardId}/{memberId}")
+    /**
+     * model 에 board 하나로만 전달 할 수 있게 수정 해야함
+     */
+
+    @GetMapping("/boardDetail/{boardId}/{memberId}")
     public String boardView(@ModelAttribute("commentForm") CommentForm commentForm,@PathVariable("boardId") Long boardId, @PathVariable("memberId") Long memberId,Model model) {
         Board board = boardService.findByBoardId(boardId);
         Member loginMember = memberService.findByOne(memberId);
+        Long likeCount = likeService.BoardLikeCount(boardId);
+        Long likeState = likeService.likeState(boardId, memberId);
         List<Comment> boardComments = commentService.findByBoardId(boardId);
         model.addAttribute("member", loginMember);
         model.addAttribute("board", board);
+        model.addAttribute("likeState", likeState);
+        model.addAttribute("likeCount", likeCount);
         model.addAttribute("boardComments", boardComments);
         return "test/board/boardView";
+    }
+
+    @PostMapping("/like/{boardId}/{memberId}")
+    public String boardCreateLike(@PathVariable("boardId") Long boardId,@PathVariable("memberId") Long memberId) {
+        likeService.like(boardId, memberId);
+        return "redirect:/test/board/boardDetail/{boardId}/{memberId}";
+    }
+    @PostMapping("/unlike/{boardId}/{memberId}")
+    public String boardDeleteLike(@PathVariable("boardId") Long boardId,@PathVariable("memberId") Long memberId) {
+        likeService.unLike(boardId, memberId);
+        return "redirect:/test/board/boardDetail/{boardId}/{memberId}";
     }
 
     @PostMapping("/comment/{boardId}/{memberId}")
@@ -89,7 +110,13 @@ public class BoardController {
             return "/test/board/boardView";
         }
         commentService.create(memberId, boardId, commentForm.getCommentInput());
-        return "redirect:/test/board/comment/{boardId}/{memberId}";
+        return "redirect:/test/board/boardDetail/{boardId}/{memberId}";
+    }
+
+    @PostMapping("/unComment/{commentId}")
+    public String boardDeleteComment(@PathVariable("commentId") Long commentId) {
+        commentService.delete(commentId);
+        return "redirect:/test/board/boards";
     }
 
 
