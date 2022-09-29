@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface BoardRepository extends JpaRepository<Board,Long> {
+public interface BoardRepository extends JpaRepository<Board,Long>, BoardViewQuery {
     //ToOne Fetch
     @Query("select b from Board b join fetch b.member m where m.id = :memberId")
     public List<Board> findAllByMemberId(@Param("memberId") Long memberId);

@@ -76,6 +76,10 @@ public class BoardServiceImpl implements BoardService {
         return boardRepository.findAllByMemberId(memberId);
     }
 
+    @Override
+    public Board findCommentFetchByBoardId(Long boardId) {
+        return boardRepository.findCommentFetchByBoardId(boardId);
+    }
 
 
 }

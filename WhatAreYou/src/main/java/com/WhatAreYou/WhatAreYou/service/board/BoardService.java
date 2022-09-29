@@ -15,4 +15,6 @@ public interface BoardService {
     public List<Board> findAll();
     public List<Board> findAllByMemberId(Long memberId);
 
+    public Board findCommentFetchByBoardId(Long boardId);
+
 }

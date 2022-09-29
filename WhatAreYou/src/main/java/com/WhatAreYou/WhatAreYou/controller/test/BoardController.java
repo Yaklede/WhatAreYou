@@ -4,11 +4,13 @@ import com.WhatAreYou.WhatAreYou.domain.Board;
 import com.WhatAreYou.WhatAreYou.domain.Comment;
 import com.WhatAreYou.WhatAreYou.domain.FileEntity;
 import com.WhatAreYou.WhatAreYou.domain.Member;
+import com.WhatAreYou.WhatAreYou.dto.BoardDTO;
 import com.WhatAreYou.WhatAreYou.dto.form.CommentForm;
 import com.WhatAreYou.WhatAreYou.dto.form.LikeForm;
 import com.WhatAreYou.WhatAreYou.dto.form.board.BoardForm;
 import com.WhatAreYou.WhatAreYou.dto.form.member.LoginForm;
 import com.WhatAreYou.WhatAreYou.exception.CommentNotFoundException;
+import com.WhatAreYou.WhatAreYou.repository.board.BoardRepository;
 import com.WhatAreYou.WhatAreYou.service.board.BoardService;
 import com.WhatAreYou.WhatAreYou.service.comment.CommentService;
 import com.WhatAreYou.WhatAreYou.service.file.FileService;
@@ -46,15 +48,16 @@ public class BoardController {
      * 전체 보드를 보여주면서 LoginMember의 데이터를 넘겨준다
      */
     @GetMapping("/create")
-    public String boardForm(@SessionAttribute("loginMember")Member loginMember, Model model) {
+    public String boardForm(@SessionAttribute("loginMember")Member loginMember,Model model) {
         BoardForm boardForm = new BoardForm();
-        boardForm.setLoginId(loginMember.getLoginId());
+        boardForm.setCreatedId(loginMember.getLoginId());
         model.addAttribute("boardForm", boardForm);
         return "/test/board/create";
     }
 
     @PostMapping("/create/{memberId}")
-    public String createBoard(@PathVariable("memberId")String loginId, @Valid @ModelAttribute("BoardForm") BoardForm form, BindingResult bindingResult) throws IOException {
+    public String createBoard(@Valid @ModelAttribute("boardForm") BoardForm form, BindingResult bindingResult, @PathVariable("memberId")String loginId, Model model) throws IOException {
+        log.info("bindingResult = {}", bindingResult.hasErrors());
         if (bindingResult.hasErrors()) {
             return "/test/board/create";
         }
@@ -62,11 +65,15 @@ public class BoardController {
         return "redirect:/test/";
     }
 
+    /**
+     * boardList Page 처리 해야함
+     */
+
     @GetMapping("/boards")
     public String boardsView(@SessionAttribute("loginMember") Member loginMember, Model model) {
         List<Board> boards = boardService.findAll();
-        model.addAttribute("boards", boards);
-        model.addAttribute("member", loginMember);
+        List<BoardDTO> boardDTOList = boards.stream().map(board -> new BoardDTO(board, loginMember)).collect(Collectors.toList());
+        model.addAttribute("boards", boardDTOList);
         return "/test/board/boardList";
     }
 
@@ -75,18 +82,27 @@ public class BoardController {
      */
 
     @GetMapping("/boardDetail/{boardId}/{memberId}")
-    public String boardView(@ModelAttribute("commentForm") CommentForm commentForm,@PathVariable("boardId") Long boardId, @PathVariable("memberId") Long memberId,Model model) {
+    public String boardView(@PathVariable("boardId") Long boardId, @PathVariable("memberId") Long memberId,Model model) {
+        BoardDTO boardDTO = getBoardDTO(boardId, memberId);
+        model.addAttribute("commentForm", new CommentForm());
+        model.addAttribute("boardDTO", boardDTO);
+        return "test/board/boardView";
+    }
+
+    private BoardDTO getBoardDTO(Long boardId, Long memberId) {
         Board board = boardService.findByBoardId(boardId);
         Member loginMember = memberService.findByOne(memberId);
         Long likeCount = likeService.BoardLikeCount(boardId);
         Long likeState = likeService.likeState(boardId, memberId);
         List<Comment> boardComments = commentService.findByBoardId(boardId);
-        model.addAttribute("member", loginMember);
-        model.addAttribute("board", board);
-        model.addAttribute("likeState", likeState);
-        model.addAttribute("likeCount", likeCount);
-        model.addAttribute("boardComments", boardComments);
-        return "test/board/boardView";
+        BoardDTO boardDTO = BoardDTO.builder()
+                .board(board)
+                .comments(boardComments)
+                .loginMember(loginMember)
+                .likeCount(likeCount)
+                .likeState(likeState)
+                .build();
+        return boardDTO;
     }
 
     @PostMapping("/like/{boardId}/{memberId}")
@@ -94,6 +110,8 @@ public class BoardController {
         likeService.like(boardId, memberId);
         return "redirect:/test/board/boardDetail/{boardId}/{memberId}";
     }
+
+
     @PostMapping("/unlike/{boardId}/{memberId}")
     public String boardDeleteLike(@PathVariable("boardId") Long boardId,@PathVariable("memberId") Long memberId) {
         likeService.unLike(boardId, memberId);
@@ -143,6 +161,18 @@ public class BoardController {
                 .content(form.getContent())
                 .build();
         boardService.create(board);
+    }
+
+    private Boolean validationBoard(BoardForm form) {
+        if (form.getContent().isEmpty() || form.getContent() == null) {
+            return true;
+        } else if (form.getTitle().isEmpty() || form.getTitle() == null) {
+            return true;
+        } else if (form.getFile() == null) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

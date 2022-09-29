@@ -5,6 +5,8 @@ import com.WhatAreYou.WhatAreYou.dto.form.board.BoardUpdateForm;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,8 +19,9 @@ public class Board extends BaseEntity {
     @Column(name = "board_id")
     private Long id;
 
+    @NotBlank
     private String title;
-
+    @NotBlank
     private String content;
 
     @OneToMany(mappedBy = "board")

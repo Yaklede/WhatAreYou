@@ -1,0 +1,46 @@
+package com.WhatAreYou.WhatAreYou.dto;
+
+import com.WhatAreYou.WhatAreYou.domain.Board;
+import com.WhatAreYou.WhatAreYou.domain.Comment;
+import com.WhatAreYou.WhatAreYou.domain.Member;
+import lombok.Builder;
+import lombok.Data;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Data
+public class BoardDTO {
+    private Long boardId;
+    private Long fileId;
+    private Long loginMemberId;
+    private String boardCreator;
+    private String title;
+    private String content;
+    private Long likeCount;
+    private Long likeState;
+    List<CommentDTO> comments;
+
+    @Builder
+    public BoardDTO(Board board, Member loginMember, Long likeState, Long likeCount, List<Comment> comments) {
+        this.boardId = board.getId();
+        this.fileId = board.getFileEntity().getId();
+        this.loginMemberId = loginMember.getId();
+        this.boardCreator = board.getMember().getLoginId();
+        this.title = board.getTitle();
+        this.content = board.getContent();
+        this.likeCount = likeCount;
+        this.likeState = likeState;
+        this.comments = comments.stream().map(comment -> new CommentDTO(comment)).collect(Collectors.toList());
+    }
+
+    public BoardDTO(Board board, Member loginMember) {
+        this.boardId = board.getId();
+        this.fileId = board.getFileEntity().getId();
+        this.loginMemberId = loginMember.getId();
+        this.boardCreator = board.getMember().getLoginId();
+        this.title = board.getTitle();
+        this.content = board.getContent();
+    }
+
+}

@@ -7,13 +7,12 @@
 <body>
 <section class="ftco-section ftco-degree-bg">
     <!-- END comment-list -->
-
     <div th:object="${boardForm}" class="comment-form-wrap pt-5">
-        <form action="#" th:action="@{/test/board/create/{memberId} (memberId = ${boardForm.loginId})}"  method="post" enctype="multipart/form-data" class="p-5 bg-light">
+        <form action="#" th:action="@{/test/board/create/{memberId} (memberId = ${boardForm.createdId})}"  method="post" enctype="multipart/form-data" class="p-5 bg-light">
             <div class="form-group">
                 <label th:for="loginId">작성자</label>
-                <input th:field="*{loginId}" th:errorclass="field-error" type="text" placeholder="enter your Book Title" class="form-control" readonly>
-                <div class="field-error" th:errors="*{loginId}"></div>
+                <input th:field="*{createdId}" type="text" placeholder="enter your Book Title" class="form-control" readonly>
+                <div class="field-error" th:errors="*{createdId}"></div>
             </div>
             <div class="form-group">
                 <label th:for="title">Title</label>
@@ -22,7 +21,8 @@
             </div>
             <div class="form-group">
                 <label th:for="img">Img</label>
-                <input type= "file" name="file" class="form-control">
+                <input th:field="*{file}" type= "file" name="file" class="form-control">
+                <div class="field-error" th:errors="*{file}"></div>
             </div>
             <div class="form-group">
                 <label th:for="content">Content</label>
