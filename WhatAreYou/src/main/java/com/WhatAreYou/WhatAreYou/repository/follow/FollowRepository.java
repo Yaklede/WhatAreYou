@@ -14,4 +14,10 @@ public interface FollowRepository extends JpaRepository<Follow,Long>,CustomFollo
     @Query("select f from Follow f join fetch f.fromMember m where m.loginId = :loginId")
     public List<Follow> findAllByLoginId(@Param("loginId") String loginId);
 
+    @Query("select f from Follow f join fetch f.fromMember m where m.id = :memberId")
+    public List<Follow> findAllByFromMemberId(@Param("memberId") Long memberId);
+
+    @Query("select f from Follow f join fetch f.toMember m where m.id = :memberId")
+    public List<Follow> findAllByToMemberId(@Param("memberId") Long memberId);
+
 }

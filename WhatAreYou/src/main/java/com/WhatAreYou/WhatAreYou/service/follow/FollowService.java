@@ -18,4 +18,6 @@ public interface FollowService {
 
     public Long followState(Long pageMemberId, Long loginId);
 
+    public void deleteAll(Long memberId);
+
 }

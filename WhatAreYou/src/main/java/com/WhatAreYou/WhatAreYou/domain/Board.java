@@ -27,13 +27,17 @@ public class Board extends BaseEntity {
     @OneToMany(mappedBy = "board")
     private List<Comment> comments = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
     @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "file_id")
     private FileEntity fileEntity;
+
+
+    @OneToOne(mappedBy = "board")
+    private HashTag hashTags;
 
     @Builder
     public Board(String title, String content, Member member, FileEntity fileEntity) {
@@ -43,12 +47,9 @@ public class Board extends BaseEntity {
         this.fileEntity = fileEntity;
     }
 
-    public void addComment(Comment comment) {
-        this.comments.add(comment);
-    }
-
     public void changeBoard(BoardUpdateForm form) {
         this.title = form.getTitle();
         this.content = form.getContent();
+
     }
 }

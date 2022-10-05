@@ -3,7 +3,7 @@ package com.WhatAreYou.WhatAreYou.service.comment;
 import com.WhatAreYou.WhatAreYou.domain.Board;
 import com.WhatAreYou.WhatAreYou.domain.Comment;
 import com.WhatAreYou.WhatAreYou.domain.Member;
-import com.WhatAreYou.WhatAreYou.dto.form.CommentUpdateForm;
+import com.WhatAreYou.WhatAreYou.dto.form.comment.CommentUpdateForm;
 import com.WhatAreYou.WhatAreYou.exception.BoardNotFoundException;
 import com.WhatAreYou.WhatAreYou.exception.CommentNotFoundException;
 import com.WhatAreYou.WhatAreYou.exception.MemberNotFoundException;
@@ -51,6 +51,12 @@ public class CommentServiceImpl implements CommentService {
     public void delete(Long commentId) {
         Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new CommentNotFoundException());
         commentRepository.delete(comment);
+    }
+
+    @Override
+    public void deleteAll(Long boardId) {
+        List<Comment> comments = commentRepository.findByBoardId(boardId);
+        commentRepository.deleteAll(comments);
     }
 
     @Transactional(readOnly = true)

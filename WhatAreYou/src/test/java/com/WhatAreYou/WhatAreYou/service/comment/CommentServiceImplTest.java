@@ -3,7 +3,7 @@ package com.WhatAreYou.WhatAreYou.service.comment;
 import com.WhatAreYou.WhatAreYou.domain.Board;
 import com.WhatAreYou.WhatAreYou.domain.Comment;
 import com.WhatAreYou.WhatAreYou.domain.Member;
-import com.WhatAreYou.WhatAreYou.dto.form.CommentUpdateForm;
+import com.WhatAreYou.WhatAreYou.dto.form.comment.CommentUpdateForm;
 import com.WhatAreYou.WhatAreYou.exception.CommentNotFoundException;
 import com.WhatAreYou.WhatAreYou.repository.board.BoardRepository;
 import com.WhatAreYou.WhatAreYou.repository.comment.CommentRepository;

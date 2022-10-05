@@ -1,9 +1,11 @@
 package com.WhatAreYou.WhatAreYou.service.member;
 
+import com.WhatAreYou.WhatAreYou.domain.Board;
 import com.WhatAreYou.WhatAreYou.domain.Member;
 import com.WhatAreYou.WhatAreYou.dto.form.member.MemberUpdateForm;
 import com.WhatAreYou.WhatAreYou.exception.MemberNotFoundException;
 import com.WhatAreYou.WhatAreYou.exception.NotEnoughStockException;
+import com.WhatAreYou.WhatAreYou.repository.board.BoardRepository;
 import com.WhatAreYou.WhatAreYou.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +23,7 @@ import java.util.Optional;
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
+    private final BoardRepository boardRepository;
 
     @Override
     public List<Member> findAll() {
@@ -62,7 +65,8 @@ public class MemberServiceImpl implements MemberService {
 
     @Transactional
     @Override
-    public void delete(Member member) {
+    public void delete(Long memberId) {
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new MemberNotFoundException());
         memberRepository.delete(member);
     }
 

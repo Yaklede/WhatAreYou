@@ -1,7 +1,7 @@
 package com.WhatAreYou.WhatAreYou.service.comment;
 
 import com.WhatAreYou.WhatAreYou.domain.Comment;
-import com.WhatAreYou.WhatAreYou.dto.form.CommentUpdateForm;
+import com.WhatAreYou.WhatAreYou.dto.form.comment.CommentUpdateForm;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +14,8 @@ public interface CommentService {
     public void update(Long commentId, CommentUpdateForm updateComment);
 
     public void delete(Long commentId);
+
+    public void deleteAll(Long boardId);
 
     public List<Comment> findAll();
 

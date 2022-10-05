@@ -80,4 +80,11 @@ public class CustomLikeRepositoryImpl implements CustomLikeRepository {
                 .fetchOne();
 
     }
+
+    public void mBoardDeleteLike(Board fromBoard) {
+        queryFactory
+                .delete(like)
+                .where(like.fromBoard.eq(fromBoard))
+                .execute();
+    }
 }

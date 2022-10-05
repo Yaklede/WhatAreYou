@@ -34,7 +34,7 @@ public class Member {
     @NotNull
     private int age;
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member",cascade = CascadeType.ALL)
     private List<Board> boardList = new ArrayList<>();
 
     @Transient

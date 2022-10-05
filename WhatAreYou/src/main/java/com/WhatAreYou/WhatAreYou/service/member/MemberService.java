@@ -15,7 +15,7 @@ public interface MemberService {
     public Member findByLoginId(String loginId);
     public Long join(Member member);
     public Member login(String loginId, String password);
-    public void delete(Member member);
+    public void delete(Long memberId);
     //회원 닉네임, 패스워드, 나이, 이메일 변경가능
     public void update(Long memberId, MemberUpdateForm updateForm);
 

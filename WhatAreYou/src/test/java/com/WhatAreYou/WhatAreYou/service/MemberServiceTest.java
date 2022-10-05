@@ -120,7 +120,7 @@ class MemberServiceTest {
                 .build();
         memberService.join(member);
         //when
-        memberService.delete(member);
+        memberService.delete(member.getId());
         //then
         org.junit.jupiter.api.Assertions.assertThrows(MemberNotFoundException.class, () -> memberService.findByOne(member.getId()));
     }

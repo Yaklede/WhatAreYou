@@ -13,6 +13,12 @@
     </style>
 </head>
 <body>
+<div th:object="${condition}">
+    <form method="get" th:action="@{/test/board/boards(query = ${condition.query})}">
+        <input type="text" th:field="*{query}" placeholder="쿼리테스트 검색하세요">
+        <button type="submit">검색</button>
+    </form>
+</div>
     <div th:each="board : ${boards}">
         <div class="form-group">
             <label th:for="loginId">작성자</label>
@@ -36,7 +42,9 @@
                 <button type="submit">게시글 보기</button>
             </div>
         </form>
-
     </div>
+    <th:block th:if="${totalPages} > 0" th:each="index : ${#numbers.sequence(1,totalPages)}">
+        <a th:href="@{/test/board/boards (page=${index})}"><span th:text="${index}">페이지 번호</span></a>
+    </th:block>
 </body>
 </html>

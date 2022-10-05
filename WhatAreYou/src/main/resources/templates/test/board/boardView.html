@@ -43,6 +43,17 @@ button.liked i{
 </head>
 <body>
     <div>
+        <th:block th:if="${boardDTO.boardCreator} == ${boardDTO.loginId}" >
+            <div>
+                <form method="post" th:action="@{/test/board/delete/{boardId} (boardId = ${boardDTO.boardId})}">
+                    <button type="submit">게시물 삭제</button>
+                </form>
+            </div>
+            <div>
+                <a href="" th:href="@{/test/board/update/{boardId} (boardId = ${boardDTO.boardId})}">게시물 업데이트</a>
+            </div>
+        </th:block>
+
         <div class="form-group">
             <label th:for="loginId">작성자</label>
             <span th:text="${boardDTO.boardCreator}" type="text" placeholder="enter your Book Title" class="form-control" readonly>
@@ -58,6 +69,9 @@ button.liked i{
         <div class="form-group">
             <label th:for="content">Content</label>
             <span th:text="${boardDTO.content}" th:inline="text" type="text" cols="30" rows="10" placeholder="enter your Book Story" class="form-control" readonly></span>
+        </div>
+        <div>
+            <span th:each="hashtag : ${boardDTO.hashTags}" th:text="${hashtag}">tag</span>
         </div>
         <div class="form-group">
             <form th:if="${boardDTO.likeState} == 0" method="post" th:action="@{/test/board/like/{boardId}/{memberId} (boardId = ${boardDTO.boardId}, memberId = ${boardDTO.loginMemberId}) }">

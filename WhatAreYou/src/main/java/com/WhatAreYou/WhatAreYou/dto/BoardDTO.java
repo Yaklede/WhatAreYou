@@ -2,6 +2,7 @@ package com.WhatAreYou.WhatAreYou.dto;
 
 import com.WhatAreYou.WhatAreYou.domain.Board;
 import com.WhatAreYou.WhatAreYou.domain.Comment;
+import com.WhatAreYou.WhatAreYou.domain.HashTag;
 import com.WhatAreYou.WhatAreYou.domain.Member;
 import lombok.Builder;
 import lombok.Data;
@@ -14,24 +15,28 @@ public class BoardDTO {
     private Long boardId;
     private Long fileId;
     private Long loginMemberId;
+    private String loginId;
     private String boardCreator;
     private String title;
     private String content;
     private Long likeCount;
     private Long likeState;
     List<CommentDTO> comments;
+    String[] hashTags;
 
     @Builder
-    public BoardDTO(Board board, Member loginMember, Long likeState, Long likeCount, List<Comment> comments) {
+    public BoardDTO(Board board, Member loginMember, Long likeState, Long likeCount, List<Comment> comments,String[] hashTags) {
         this.boardId = board.getId();
         this.fileId = board.getFileEntity().getId();
         this.loginMemberId = loginMember.getId();
+        this.loginId = loginMember.getLoginId();
         this.boardCreator = board.getMember().getLoginId();
         this.title = board.getTitle();
         this.content = board.getContent();
         this.likeCount = likeCount;
         this.likeState = likeState;
         this.comments = comments.stream().map(comment -> new CommentDTO(comment)).collect(Collectors.toList());
+        this.hashTags = hashTags;
     }
 
     public BoardDTO(Board board, Member loginMember) {

@@ -6,6 +6,8 @@ import com.WhatAreYou.WhatAreYou.dto.form.member.LoginForm;
 import com.WhatAreYou.WhatAreYou.dto.form.member.MemberDeleteForm;
 import com.WhatAreYou.WhatAreYou.dto.form.member.MemberUpdateForm;
 import com.WhatAreYou.WhatAreYou.exception.NotEnoughStockException;
+import com.WhatAreYou.WhatAreYou.service.board.BoardService;
+import com.WhatAreYou.WhatAreYou.service.follow.FollowService;
 import com.WhatAreYou.WhatAreYou.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +30,8 @@ import java.util.stream.Collectors;
 public class MemberController {
 
     private final MemberService memberService;
+    private final FollowService followService;
+    private final BoardService boardService;
 
     @PostConstruct
     public void init() {
@@ -98,6 +102,7 @@ public class MemberController {
         HttpSession session = request.getSession(false);
         if(session != null) {
             session.invalidate();
+            log.info("로그아웃 되었습니다.");
         }
         return "redirect:/test/";
     }
@@ -115,6 +120,13 @@ public class MemberController {
         model.addAttribute("members", members);
         return "/test/member/delete";
     }
+    @PostMapping("/delete/{memberId}")
+    public String delete(@PathVariable("memberId") Long memberId) {
+        followService.deleteAll(memberId);
+        boardService.deleteAllByMemberId(memberId);
+        memberService.delete(memberId);
+        return "redirect:/test/";
+    }
 
     @GetMapping("/updateList")
     public String updateList(Model model) {
@@ -130,12 +142,6 @@ public class MemberController {
         MemberUpdateForm updateForm = new MemberUpdateForm(findMember);
         model.addAttribute("updateForm", updateForm);
         return "test/member/update";
-    }
-    @PostMapping("/delete/{memberId}")
-    public String delete(@PathVariable("memberId") Long memberId) {
-        Member findMember = memberService.findByOne(memberId);
-        memberService.delete(findMember);
-        return "redirect:/test/";
     }
 
     @PostMapping("/update/{memberId}")

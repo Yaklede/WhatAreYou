@@ -18,4 +18,6 @@ public interface LikeService {
     public Long MemberLikeCount(Long memberId);
 
     public Long BoardLikeCount(Long boardId);
+
+    public void BoardDeleteLike(Long boardId);
 }

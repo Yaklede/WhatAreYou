@@ -60,4 +60,12 @@ public class FollowServiceImpl implements FollowService {
         return followRepository.mFollowState(loginMember, pageMember);
         // 0 : false , 1 : true
     }
+
+    @Override
+    public void deleteAll(Long memberId) {
+        List<Follow> toFollow = followRepository.findAllByToMemberId(memberId);
+        List<Follow> fromFollow = followRepository.findAllByFromMemberId(memberId);
+        followRepository.deleteAll(toFollow);
+        followRepository.deleteAll(fromFollow);
+    }
 }

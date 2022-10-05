@@ -15,4 +15,6 @@ public interface CustomLikeRepository {
 
     //게시판 좋아요 개수 조회
     public Long mBoardLikeCount(Board fromBoard);
+
+    public void mBoardDeleteLike(Board fromBoard);
 }

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -65,5 +66,11 @@ public class LikeServiceImpl implements LikeService {
     public Long BoardLikeCount(Long boardId) {
         Board board = boardRepository.findById(boardId).orElseThrow(() -> new BoardNotFoundException());
         return likeRepository.mBoardLikeCount(board);
+    }
+
+    @Override
+    public void BoardDeleteLike(Long boardId) {
+        Board board = boardRepository.findById(boardId).orElseThrow(() -> new BoardNotFoundException());
+        likeRepository.mBoardDeleteLike(board);
     }
 }

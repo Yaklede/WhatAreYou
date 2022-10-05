@@ -1,31 +1,27 @@
 package com.WhatAreYou.WhatAreYou.controller.test;
 
-import com.WhatAreYou.WhatAreYou.domain.Board;
-import com.WhatAreYou.WhatAreYou.domain.Comment;
-import com.WhatAreYou.WhatAreYou.domain.FileEntity;
-import com.WhatAreYou.WhatAreYou.domain.Member;
+import com.WhatAreYou.WhatAreYou.domain.*;
 import com.WhatAreYou.WhatAreYou.dto.BoardDTO;
-import com.WhatAreYou.WhatAreYou.dto.form.CommentForm;
-import com.WhatAreYou.WhatAreYou.dto.form.LikeForm;
+import com.WhatAreYou.WhatAreYou.dto.form.comment.CommentForm;
 import com.WhatAreYou.WhatAreYou.dto.form.board.BoardForm;
-import com.WhatAreYou.WhatAreYou.dto.form.member.LoginForm;
-import com.WhatAreYou.WhatAreYou.exception.CommentNotFoundException;
-import com.WhatAreYou.WhatAreYou.repository.board.BoardRepository;
+import com.WhatAreYou.WhatAreYou.dto.form.board.BoardSearchCondition;
 import com.WhatAreYou.WhatAreYou.service.board.BoardService;
 import com.WhatAreYou.WhatAreYou.service.comment.CommentService;
 import com.WhatAreYou.WhatAreYou.service.file.FileService;
+import com.WhatAreYou.WhatAreYou.service.hashTag.HashTagService;
 import com.WhatAreYou.WhatAreYou.service.like.LikeService;
 import com.WhatAreYou.WhatAreYou.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
-import org.springframework.jmx.export.annotation.ManagedOperation;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
@@ -42,6 +38,7 @@ public class BoardController {
     private final CommentService commentService;
     private final FileService fileService;
     private final LikeService likeService;
+    private final HashTagService hashTagService;
 
     /**
      * 원래 컨트롤러에서는 로그인 된 사용자만 api 호출 할 수 있게 인터셉터를 걸어둘 것이고
@@ -61,19 +58,47 @@ public class BoardController {
         if (bindingResult.hasErrors()) {
             return "/test/board/create";
         }
+        String x = BoardValidator(form, bindingResult);
+        if (x != null) return x;
         createBoard(loginId, form);
+
         return "redirect:/test/";
     }
 
-    /**
-     * boardList Page 처리 해야함
-     */
+    private String BoardValidator(BoardForm form, BindingResult bindingResult) {
+        if (!form.getHashTag().substring(0, 1).equals("#") || form.getHashTag().contains(",") || form.getFile().isEmpty()) {
+            if (form.getHashTag().contains(",")) {
+                bindingResult.reject("태그에는 , 불가","ex)#태그#태그2 형식으로 작성해야 하고 , 는 사용이 불가능합니다.");
+                return "/test/board/create";
+            }
+            if (form.getFile().isEmpty()) {
+                bindingResult.reject("이미지 없음","게시글에 이미지는 필수입니다..");
+                return "/test/board/create";
+            }
+            bindingResult.reject("태그에는 # 필수","해시태그에는 #이 필수입니다.");
+            return "/test/board/create";
+
+        }
+        return null;
+    }
+
+    @PostMapping("/delete/{boardId}")
+    public String deleteBoard(@PathVariable("boardId") Long boardId) {
+        commentService.deleteAll(boardId);
+        likeService.BoardDeleteLike(boardId);
+        hashTagService.delete(boardId);
+        boardService.delete(boardId);
+        return "redirect:/test/board";
+    }
 
     @GetMapping("/boards")
-    public String boardsView(@SessionAttribute("loginMember") Member loginMember, Model model) {
-        List<Board> boards = boardService.findAll();
+    public String boardsView(@SessionAttribute("loginMember") Member loginMember,@ModelAttribute("condition") BoardSearchCondition condition, @PageableDefault(size = 1) Pageable pageable, Model model) {
+        Page<Board> pageBoards = boardService.findSearchPageAll(condition,pageable);
+        List<Board> boards = pageBoards.getContent();
+        int totalPages = pageBoards.getTotalPages();
         List<BoardDTO> boardDTOList = boards.stream().map(board -> new BoardDTO(board, loginMember)).collect(Collectors.toList());
         model.addAttribute("boards", boardDTOList);
+        model.addAttribute("totalPages", totalPages);
         return "/test/board/boardList";
     }
 
@@ -95,9 +120,24 @@ public class BoardController {
         Long likeCount = likeService.BoardLikeCount(boardId);
         Long likeState = likeService.likeState(boardId, memberId);
         List<Comment> boardComments = commentService.findByBoardId(boardId);
+        HashTag tag = hashTagService.findByBoardId(boardId);
+
+        String[] split = tag.getTag().split("#");
+        String[] hashTags = new String[split.length];
+        for (int i = 0; i < split.length; i++) {
+            if (!split[i].isEmpty()) {
+                int index = i;
+                hashTags[index - 1] = "#" + split[i];
+            }
+        }
+        for (String hashTag : hashTags) {
+            log.info("tag = {}", hashTag);
+        }
+
         BoardDTO boardDTO = BoardDTO.builder()
                 .board(board)
                 .comments(boardComments)
+                .hashTags(hashTags)
                 .loginMember(loginMember)
                 .likeCount(likeCount)
                 .likeState(likeState)
@@ -150,7 +190,6 @@ public class BoardController {
     }
 
     private void createBoard(String loginId, BoardForm form) throws IOException {
-
         Member member = memberService.findByLoginId(loginId);
         Long createdFile = fileService.saveFile(form.getFile());
         FileEntity fileEntity = fileService.findByOne(createdFile);
@@ -161,18 +200,8 @@ public class BoardController {
                 .content(form.getContent())
                 .build();
         boardService.create(board);
+        hashTagService.create(board.getId(), form.getHashTag());
     }
 
-    private Boolean validationBoard(BoardForm form) {
-        if (form.getContent().isEmpty() || form.getContent() == null) {
-            return true;
-        } else if (form.getTitle().isEmpty() || form.getTitle() == null) {
-            return true;
-        } else if (form.getFile() == null) {
-            return true;
-        } else {
-            return false;
-        }
-    }
 
 }
