@@ -26,6 +26,9 @@ public class FileEntity {
     @OneToOne(mappedBy = "fileEntity")
     private Board board;
 
+    @OneToOne(mappedBy = "fileEntity")
+    private Member member;
+
     @Builder
     public FileEntity(String orgNm, String saveNm, String savePath) {
         this.orgNm = orgNm;

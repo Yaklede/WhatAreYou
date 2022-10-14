@@ -15,6 +15,7 @@ public interface BoardService {
     public void delete(Long boardId);
     public void deleteAllByMemberId(Long memberId);
     public void update(Long boardId,BoardUpdateForm updateForm);
+
     public Board findByBoardId(Long boardId);
     public List<Board> findAll();
 
@@ -26,5 +27,7 @@ public interface BoardService {
     public List<Board> findAllByMemberId(Long memberId);
 
     public Board findCommentFetchByBoardId(Long boardId);
+
+    public Long boardCountByMemberId(Long memberId);
 
 }

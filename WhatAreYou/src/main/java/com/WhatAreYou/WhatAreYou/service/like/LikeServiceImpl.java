@@ -32,6 +32,8 @@ public class LikeServiceImpl implements LikeService {
     public Long like(Long fromBoardId, Long toMemberId) {
         Board fromBoard = boardRepository.findById(fromBoardId).orElseThrow(() -> new BoardNotFoundException());
         Member toMember = memberRepository.findById(toMemberId).orElseThrow(() -> new MemberNotFoundException());
+        Long likeCount = likeRepository.mBoardLikeCount(fromBoard);
+        fromBoard.addLikeCount(likeCount);
         return likeRepository.mLike(fromBoard, toMember);
     }
     @Transactional

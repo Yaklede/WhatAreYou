@@ -35,9 +35,10 @@ public class Board extends BaseEntity {
     @JoinColumn(name = "file_id")
     private FileEntity fileEntity;
 
-
     @OneToOne(mappedBy = "board")
     private HashTag hashTags;
+
+    private Long likeCount;
 
     @Builder
     public Board(String title, String content, Member member, FileEntity fileEntity) {
@@ -51,5 +52,9 @@ public class Board extends BaseEntity {
         this.title = form.getTitle();
         this.content = form.getContent();
 
+    }
+
+    public void addLikeCount(Long likeCount) {
+        this.likeCount = likeCount;
     }
 }

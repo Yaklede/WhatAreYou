@@ -97,18 +97,6 @@ class MemberServiceTest {
         Assertions.assertThat(failLogin).isNull();
     }
     @Test
-    public void validDuplicate() throws Exception {
-        try {
-            Member memberA = new Member("a", "a", "a", "a", 1);
-            memberService.join(memberA);
-            Member memberB = new Member("a", "a", "a", "a", 1);
-            memberService.join(memberB);
-        } catch (NotEnoughStockException e) {
-            org.junit.jupiter.api.Assertions.assertEquals("이미 존재하는 회원입니다.", e.getMessage());
-        }
-    }
-
-    @Test
     public void delete() throws Exception {
         //given
         Member member = Member.builder()

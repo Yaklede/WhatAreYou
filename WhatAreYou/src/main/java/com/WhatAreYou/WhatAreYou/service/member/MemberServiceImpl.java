@@ -7,8 +7,11 @@ import com.WhatAreYou.WhatAreYou.exception.MemberNotFoundException;
 import com.WhatAreYou.WhatAreYou.exception.NotEnoughStockException;
 import com.WhatAreYou.WhatAreYou.repository.board.BoardRepository;
 import com.WhatAreYou.WhatAreYou.repository.member.MemberRepository;
+import com.WhatAreYou.WhatAreYou.service.file.FileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,10 +27,16 @@ public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
     private final BoardRepository boardRepository;
+    private final FileService fileService;
 
     @Override
     public List<Member> findAll() {
         return memberRepository.findAll();
+    }
+
+    @Override
+    public Page<Member> findPageAll(Pageable pageable) {
+        return memberRepository.findPageAll(pageable);
     }
 
     @Override

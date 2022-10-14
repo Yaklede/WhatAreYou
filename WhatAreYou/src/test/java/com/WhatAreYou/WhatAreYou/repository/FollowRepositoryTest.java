@@ -24,12 +24,6 @@ class FollowRepositoryTest {
     @Autowired
     EntityManager em;
 
-    @BeforeEach
-    public void init() {
-        memberRepository.save(new Member("a", "a", "a", "a", 10));
-        memberRepository.save(new Member("b", "a", "b", "a", 10));
-        memberRepository.save(new Member("c", "a", "c", "a", 10));
-    }
 
     @Test
     public void follow() throws Exception {

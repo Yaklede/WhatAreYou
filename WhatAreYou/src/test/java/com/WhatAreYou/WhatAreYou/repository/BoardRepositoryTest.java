@@ -3,6 +3,7 @@ package com.WhatAreYou.WhatAreYou.repository;
 import com.WhatAreYou.WhatAreYou.domain.Member;
 import com.WhatAreYou.WhatAreYou.repository.board.BoardRepository;
 import com.WhatAreYou.WhatAreYou.repository.member.MemberRepository;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +20,6 @@ class BoardRepositoryTest {
     @Autowired
     BoardRepository boardRepository;
 
-    @BeforeEach
-    public void init() {
-        memberRepository.save(new Member("a", "b", "c", "d", 10));
-    }
-
     @Test
     public void findAllByMemberId() throws Exception {
         //given
@@ -32,5 +28,15 @@ class BoardRepositoryTest {
         //when
 
         //then
+    }
+    @Test
+    public void countByMember() throws Exception {
+        //given
+        Long count = boardRepository.countByMemberId(1L);
+        Assertions.assertThat(count).isEqualTo(0);
+        //when
+
+        //then
+
     }
 }

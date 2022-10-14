@@ -1,6 +1,7 @@
 package com.WhatAreYou.WhatAreYou.dto.form.member;
 
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -17,4 +18,6 @@ public class JoinForm {
     private String email;
     @NotNull
     private int age;
+    @NotNull
+    private MultipartFile file;
 }

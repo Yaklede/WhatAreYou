@@ -12,7 +12,9 @@ import java.util.List;
 @Repository
 public interface CommentRepository extends JpaRepository<Comment,Long> {
     public List<Comment> findByMemberId(Long memberId);
-
     public List<Comment> findByBoardId(Long boardId);
+
+    @Query("select COUNT(c) from Comment c where c.board.id = :boardId")
+    public Long countByBoardId(@Param("boardId") Long boardId);
 
 }

@@ -6,6 +6,7 @@ import lombok.Data;
 @Data
 public class CommentDTO {
     private Long commentId;
+    private Long memberId;
     private String nickName;
     private String comment;
 
@@ -13,5 +14,6 @@ public class CommentDTO {
         this.commentId = comment.getId();
         this.comment = comment.getComment();
         this.nickName = comment.getMember().getNickName();
+        this.memberId = comment.getMember().getId();
     }
 }

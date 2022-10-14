@@ -21,11 +21,12 @@ public class BoardDTO {
     private String content;
     private Long likeCount;
     private Long likeState;
+    private Long commentCount;
     List<CommentDTO> comments;
     String[] hashTags;
 
     @Builder
-    public BoardDTO(Board board, Member loginMember, Long likeState, Long likeCount, List<Comment> comments,String[] hashTags) {
+    public BoardDTO(Board board, Member loginMember, Long likeState, Long likeCount, List<Comment> comments,String[] hashTags,Long commentCount) {
         this.boardId = board.getId();
         this.fileId = board.getFileEntity().getId();
         this.loginMemberId = loginMember.getId();
@@ -37,6 +38,7 @@ public class BoardDTO {
         this.likeState = likeState;
         this.comments = comments.stream().map(comment -> new CommentDTO(comment)).collect(Collectors.toList());
         this.hashTags = hashTags;
+        this.commentCount = commentCount;
     }
 
     public BoardDTO(Board board, Member loginMember) {
@@ -46,6 +48,18 @@ public class BoardDTO {
         this.boardCreator = board.getMember().getLoginId();
         this.title = board.getTitle();
         this.content = board.getContent();
+    }
+
+    public BoardDTO(Board board, Member loginMember,Long likeCount,Long commentCount,String[] hashTags) {
+        this.boardId = board.getId();
+        this.fileId = board.getFileEntity().getId();
+        this.loginMemberId = loginMember.getId();
+        this.boardCreator = board.getMember().getLoginId();
+        this.title = board.getTitle();
+        this.content = board.getContent();
+        this.commentCount = commentCount;
+        this.likeCount = likeCount;
+        this.hashTags = hashTags;
     }
 
 }

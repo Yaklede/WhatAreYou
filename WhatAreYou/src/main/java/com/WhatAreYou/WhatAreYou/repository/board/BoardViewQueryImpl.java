@@ -3,12 +3,14 @@ package com.WhatAreYou.WhatAreYou.repository.board;
 
 import com.WhatAreYou.WhatAreYou.domain.*;
 import com.WhatAreYou.WhatAreYou.dto.form.board.BoardSearchCondition;
+import com.WhatAreYou.WhatAreYou.repository.like.LikeRepository;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.extern.slf4j.Slf4j;
+import net.bytebuddy.asm.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -27,10 +29,13 @@ import static com.WhatAreYou.WhatAreYou.domain.QHashTag.*;
 import static com.WhatAreYou.WhatAreYou.domain.QLike.*;
 
 @Slf4j
+
 public class BoardViewQueryImpl implements BoardViewQuery {
 
     private final JPAQueryFactory queryFactory;
 
+
+    @Autowired
     public BoardViewQueryImpl(EntityManager em) {
         this.queryFactory = new JPAQueryFactory(em);
     }
@@ -50,7 +55,7 @@ public class BoardViewQueryImpl implements BoardViewQuery {
                 .selectFrom(board)
                 .limit(pageable.getPageSize())
                 .offset(pageable.getOffset())
-                .orderBy(board.id.desc())
+                .orderBy(board.likeCount.desc())
                 .fetch();
 
         Long count = queryFactory

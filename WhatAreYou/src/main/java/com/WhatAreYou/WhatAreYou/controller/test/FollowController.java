@@ -32,9 +32,11 @@ public class FollowController {
             return "redirect:/test/member";
         }
         List<Member> members = findFollows(loginMember);
-        Long followCount = followService.followCount(loginMember);
+        Long followerCount = followService.followerCount(loginMember);
+        Long followingCount = followService.followingCount(loginMember);
         model.addAttribute("members", members);
-        model.addAttribute("followCount", followCount);
+        model.addAttribute("followerCount", followerCount);
+        model.addAttribute("followingCount", followingCount);
         return "/test/member/followList";
     }
 

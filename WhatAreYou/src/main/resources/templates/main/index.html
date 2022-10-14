@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Anime Template">
+    <meta name="keywords" content="Anime, unica, creative, html">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Anime | Template</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="/main/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="/main/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="/main/css/elegant-icons.css" type="text/css">
+    <link rel="stylesheet" href="/main/css/plyr.css" type="text/css">
+    <link rel="stylesheet" href="/main/css/nice-select.css" type="text/css">
+    <link rel="stylesheet" href="/main/css/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="/main/css/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="/main/css/style.css" type="text/css">
+</head>
+
+<body>
+    <!-- Page Preloder -->
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Header Section Begin -->
+    <header class="header">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-2">
+                    <div class="header__logo">
+                        <a href="./index.html">
+                            <img src="img/logo.png" alt="">
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="header__nav">
+                        <nav class="header__menu mobile-menu">
+                            <ul>
+                                <li class="active"><a href="./index.html">Homepage</a></li>
+                                <li><a href="./categories.html">Categories <span class="arrow_carrot-down"></span></a>
+                                    <ul class="dropdown">
+                                        <li><a href="./categories.html" th:href="@{/board/create}">일러스트 투고</a></li>
+                                        <li><form method="post" th:action="@{/member/logout}"><button type="submit">로그아웃</button></form></li>
+                                    </ul>
+                                </li>
+                                <li><a href="./blog.html">Our Blog</a></li>
+                                <li><a href="#">Contacts</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <div class="header__right">
+                        <a href="#" class="search-switch"><span class="icon_search"></span></a>
+                        <a href="./login.html"><span class="icon_profile"></span></a>
+                        <span style="color: white;" th:text="${member.loginId}"></span>
+                    </div>
+                </div>
+            </div>
+            <div id="mobile-menu-wrap"></div>
+        </div>
+    </header>
+    <!-- Header End -->
+
+    <!-- Hero Section Begin -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero__slider owl-carousel">
+                <h1 style="color :white">Ah Sibar sibar sibar</h1>
+            </div>
+        </div>
+    </section>
+    <!-- Hero Section End -->
+
+    <!-- Product Section Begin -->
+    <section class="product spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="trending__product">
+                        <div class="row">
+                            <div class="col-lg-8 col-md-8 col-sm-8">
+                                <div class="section-title">
+                                    <h4>recently</h4>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4">
+                                <div class="btn__all">
+                                    <a href="#" class="primary-btn">View All <span class="arrow_right"></span></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div th:each="board : ${boards}"  class="row">
+                            <div class="col-lg-4 col-md-6 col-sm-6">
+                                <div class="product__item">
+                                    <div class="product__item__pic set-bg" >
+                                        <img th:src="@{/image/{fileId} (fileId = ${board.fileId})}" style="object-fit : cover; height : 100%; width : 100%; border-radius : 20px;"/>
+                                            <div class="comment"><i class="fa fa-comments"></i><span th:text="${board.commentCount}">11</span></div>
+                                            <div class="view"><i class="fa fa-thumbs-up"></i><span th:text="${board.likeCount}">999</span></div>
+                                    </div>
+                                    <div class="product__item__text">
+                                        <ul th:each="tag : ${board.hashTags}">
+                                            <li th:text="${tag}">Active</li>
+                                        </ul>
+                                        <h5><a href="#" th:text="${board.title}" th:href="@{/board/boardDetail/{boardId}/{memberId} (boardId = ${board.boardId} , memberId = ${member.id})}">Boruto: Naruto next generations</a></h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-8">
+                    <div class="product__sidebar">
+                        <div class="product__sidebar__view">
+                            <div class="section-title">
+                                <h5>Top 3 Views</h5>
+                            </div>
+                            <div th:each="ranking :  ${rankings}" class="filter__gallery">
+                                <div class="product__sidebar__view__item set-bg mix day years">
+                                    <img th:src="@{/image/{fileId} (fileId = ${ranking.fileId})}" style="height : 100%; width : 100%;object-fit: cover;"/>
+                                    <div class="view"><i class="fa fa-thumbs-up"></i><span th:text="${ranking.likeCount}">9141</span></div>
+                                    <h5><a href="#" th:text="${ranking.title}">Boruto: Naruto next generations</a></h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+    <div class="product__sidebar__comment">
+        <div class="section-title">
+            <h5>Follow Ranking top 3</h5>
+        </div>
+        <div th:each="follow : ${follows}" class="product__sidebar__comment__item" style="border-bottom: 1px solid gray; padding-bottom: 10px;">
+            <div class="product__sidebar__comment__item__pic">
+                <img th:src="@{/image/{fileId} (fileId = ${follow.fileId})}" src="img/sidebar/comment-1.jpg" alt="" style="border-radius: 50%; width: 65px; height: 65px;">
+            </div>
+            <div class="product__sidebar__comment__item__text">
+                <h5><a href="#" th:text="${follow.followNickName}">nickname</a></h5>
+                <span th:text="|${follow.followerCount} follower|"><i class="fa fa-user-circle"></i> 19.141 follower</span>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Product Section End -->
+
+<!-- Footer Section Begin -->
+<footer class="footer">
+    <div class="page-up">
+        <a href="#" id="scrollToTopButton"><span class="arrow_carrot-up"></span></a>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="footer__logo">
+                    <a href="./index.html"><img src="img/logo.png" alt=""></a>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="footer__nav">
+                    <ul>
+                        <li class="active"><a href="./index.html">Homepage</a></li>
+                        <li><a href="./categories.html">Categories</a></li>
+                        <li><a href="./blog.html">Our Blog</a></li>
+                        <li><a href="#">Contacts</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                  Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+                  <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+
+              </div>
+          </div>
+      </div>
+  </footer>
+  <!-- Footer Section End -->
+
+  <!-- Search model Begin -->
+  <div class="search-model">
+    <div class="h-100 d-flex align-items-center justify-content-center">
+        <div class="search-close-switch"><i class="icon_close"></i></div>
+        <form class="search-model-form">
+            <input type="text" id="search-input" placeholder="Search here.....">
+        </form>
+    </div>
+</div>
+<!-- Search model end -->
+
+<!-- Js Plugins -->
+<script src="/main/js/jquery-3.3.1.min.js"></script>
+<script src="/main/js/bootstrap.min.js"></script>
+<script src="/main/js/player.js"></script>
+<script src="/main/js/jquery.nice-select.min.js"></script>
+<script src="/main/js/mixitup.min.js"></script>
+<script src="/main/js/jquery.slicknav.js"></script>
+<script src="/main/js/owl.carousel.min.js"></script>
+<script src="/main/js/main.js"></script>
+
+
+</body>
+
+</html>

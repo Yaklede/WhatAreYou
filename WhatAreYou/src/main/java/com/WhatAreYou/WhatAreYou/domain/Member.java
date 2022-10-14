@@ -1,5 +1,6 @@
 package com.WhatAreYou.WhatAreYou.domain;
 
+import com.WhatAreYou.WhatAreYou.base.BaseEntity;
 import com.WhatAreYou.WhatAreYou.dto.form.member.MemberUpdateForm;
 import lombok.*;
 
@@ -13,7 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Member {
+public class Member extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
@@ -37,16 +38,22 @@ public class Member {
     @OneToMany(mappedBy = "member",cascade = CascadeType.ALL)
     private List<Board> boardList = new ArrayList<>();
 
+    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    private FileEntity fileEntity;
+
     @Transient
     private Long followState;
 
+    private Long followerCount;
+
     @Builder
-    public Member(@NotEmpty String loginId, @NotEmpty String password, @NotEmpty String nickName, @NotEmpty String email, @NotEmpty int age) {
+    public Member(@NotEmpty String loginId, @NotEmpty String password, @NotEmpty String nickName, @NotEmpty String email, @NotEmpty int age, FileEntity fileEntity) {
         this.loginId = loginId;
         this.password = password;
         this.nickName = nickName;
         this.email = email;
         this.age = age;
+        this.fileEntity = fileEntity;
     }
 
     public void updateMember(MemberUpdateForm updateForm) {
@@ -54,6 +61,10 @@ public class Member {
         this.nickName = updateForm.getNickName();
         this.age = updateForm.getAge();
         this.email = updateForm.getEmail();
+    }
+
+    public void addFollowerCount(Long followerCount) {
+        this.followerCount = followerCount;
     }
 
 }

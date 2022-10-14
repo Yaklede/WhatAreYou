@@ -33,4 +33,5 @@ public class Follow extends BaseEntity {
         this.fromMember = fromMember;
         this.toMember = toMember;
     }
+
 }

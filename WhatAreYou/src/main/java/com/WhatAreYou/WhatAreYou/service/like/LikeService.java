@@ -1,6 +1,7 @@
 package com.WhatAreYou.WhatAreYou.service.like;
 
 import com.WhatAreYou.WhatAreYou.domain.Like;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,4 +21,5 @@ public interface LikeService {
     public Long BoardLikeCount(Long boardId);
 
     public void BoardDeleteLike(Long boardId);
+
 }

@@ -44,8 +44,10 @@ public class BoardController {
      * 원래 컨트롤러에서는 로그인 된 사용자만 api 호출 할 수 있게 인터셉터를 걸어둘 것이고
      * 전체 보드를 보여주면서 LoginMember의 데이터를 넘겨준다
      */
+
+
     @GetMapping("/create")
-    public String boardForm(@SessionAttribute("loginMember")Member loginMember,Model model) {
+    public String boardForm(@SessionAttribute("loginMember") Member loginMember, Model model) {
         BoardForm boardForm = new BoardForm();
         boardForm.setCreatedId(loginMember.getLoginId());
         model.addAttribute("boardForm", boardForm);

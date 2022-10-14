@@ -64,7 +64,7 @@ button.liked i{
         </div>
         <div class="form-group">
             <label th:for="img">Img</label>
-            <Img th:src="@{/test/board/image/{fileId} (fileId = ${boardDTO.fileId}) }" type="file" name="file" class="form-control" readonly>
+            <Img th:src="@{/test/board/image/{fileId} (fileId = ${boardDTO.fileId})}" type="file" name="file" class="form-control" readonly>
         </div>
         <div class="form-group">
             <label th:for="content">Content</label>

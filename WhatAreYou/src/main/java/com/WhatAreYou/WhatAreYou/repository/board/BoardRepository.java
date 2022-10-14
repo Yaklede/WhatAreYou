@@ -14,5 +14,6 @@ public interface BoardRepository extends JpaRepository<Board,Long>, BoardViewQue
     @Query("select b from Board b join fetch b.member m where m.id = :memberId")
     public List<Board> findAllByMemberId(@Param("memberId") Long memberId);
 
-
+    @Query("select COUNT(b) from Board b where b.member.id = :memberId")
+    Long countByMemberId(@Param("memberId") Long memberId);
 }

@@ -74,4 +74,9 @@ public class CommentServiceImpl implements CommentService {
     public List<Comment> findByBoardId(Long boardId) {
         return commentRepository.findByBoardId(boardId);
     }
+
+    @Override
+    public Long countByBoardId(Long boardId) {
+        return commentRepository.countByBoardId(boardId);
+    }
 }

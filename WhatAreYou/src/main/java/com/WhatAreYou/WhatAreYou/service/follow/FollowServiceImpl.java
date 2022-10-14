@@ -8,6 +8,8 @@ import com.WhatAreYou.WhatAreYou.repository.follow.FollowRepository;
 import com.WhatAreYou.WhatAreYou.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,8 +31,13 @@ public class FollowServiceImpl implements FollowService {
 
 
     @Override
-    public Long followCount(Member fromMember) {
-        return followRepository.mFollowCount(fromMember);
+    public Long followerCount(Member fromMember) {
+        return followRepository.mFollowerCount(fromMember);
+    }
+
+    @Override
+    public Long followingCount(Member toMember) {
+        return followRepository.mFollowingCount(toMember);
     }
 
     @Transactional
@@ -38,9 +45,11 @@ public class FollowServiceImpl implements FollowService {
     public Long follow(Long fromMemberId, Long toMemberId) {
         Member fromMember = memberRepository.findById(fromMemberId).orElseThrow(() -> new MemberNotFoundException());
         Member toMember = memberRepository.findById(toMemberId).orElseThrow(() -> new MemberNotFoundException());
+        Long followerCount = followRepository.mFollowerCount(fromMember);
         if (fromMember == toMember) {
             throw new FollowMemberCanNotSameException("팔로우 회원은 같을 수 없습니다.");
         }
+        fromMember.addFollowerCount(followerCount);
 
         return followRepository.mFollow(fromMember, toMember);
     }
@@ -67,5 +76,10 @@ public class FollowServiceImpl implements FollowService {
         List<Follow> fromFollow = followRepository.findAllByFromMemberId(memberId);
         followRepository.deleteAll(toFollow);
         followRepository.deleteAll(fromFollow);
+    }
+
+    @Override
+    public Page<Follow> findPageAll(Pageable pageable) {
+        return followRepository.findPageAll(pageable);
     }
 }

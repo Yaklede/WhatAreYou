@@ -24,4 +24,14 @@ class CommentRepositoryTest {
         //then
 
     }
+    @Test
+    public void count() throws Exception {
+        //given
+        commentRepository.countByBoardId(1L);
+
+        //when
+
+        //then
+
+    }
 }

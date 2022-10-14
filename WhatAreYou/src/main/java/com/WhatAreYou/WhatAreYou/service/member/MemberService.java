@@ -2,6 +2,8 @@ package com.WhatAreYou.WhatAreYou.service.member;
 
 import com.WhatAreYou.WhatAreYou.domain.Member;
 import com.WhatAreYou.WhatAreYou.dto.form.member.MemberUpdateForm;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,6 +13,8 @@ import java.util.List;
 @Transactional
 public interface MemberService {
     public List<Member> findAll();
+
+    public Page<Member> findPageAll(Pageable pageable);
     public Member findByOne(Long memberId);
     public Member findByLoginId(String loginId);
     public Long join(Member member);

@@ -22,4 +22,6 @@ public interface CommentService {
     public List<Comment> findByMemberId(Long memberId);
 
     public List<Comment> findByBoardId(Long boardId);
+
+    public Long countByBoardId(Long boardId);
 }
