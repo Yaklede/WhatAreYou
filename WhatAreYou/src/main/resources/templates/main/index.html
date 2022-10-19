@@ -50,7 +50,6 @@
                                 <li><a href="./categories.html">Categories <span class="arrow_carrot-down"></span></a>
                                     <ul class="dropdown">
                                         <li><a href="./categories.html" th:href="@{/board/create}">일러스트 투고</a></li>
-                                        <li><form method="post" th:action="@{/member/logout}"><button type="submit">로그아웃</button></form></li>
                                     </ul>
                                 </li>
                                 <li><a href="./blog.html">Our Blog</a></li>
@@ -60,10 +59,11 @@
                     </div>
                 </div>
                 <div class="col-lg-2">
-                    <div class="header__right">
+                    <div class="header__right" style="display:flex;">
                         <a href="#" class="search-switch"><span class="icon_search"></span></a>
-                        <a href="./login.html"><span class="icon_profile"></span></a>
+                        <a href="./login.html" th:href="@{/profile/{memberId} (memberId = ${member.memberId})}"><span class="icon_profile"></span></a>
                         <span style="color: white;" th:text="${member.loginId}"></span>
+                        <form method="post" th:action="@{/member/logout}"><button style="color:white; background-color:transparent; outline: 0; border: 0; width:100%" type="submit"><span class="icon_lock"></span></button></form>
                     </div>
                 </div>
             </div>
@@ -100,8 +100,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div th:each="board : ${boards}"  class="row">
-                            <div class="col-lg-4 col-md-6 col-sm-6">
+                        <div class="row">
+                            <div th:each="board : ${boards}" class="col-lg-4 col-md-6 col-sm-6">
                                 <div class="product__item">
                                     <div class="product__item__pic set-bg" >
                                         <img th:src="@{/image/{fileId} (fileId = ${board.fileId})}" style="object-fit : cover; height : 100%; width : 100%; border-radius : 20px;"/>
@@ -112,7 +112,7 @@
                                         <ul th:each="tag : ${board.hashTags}">
                                             <li th:text="${tag}">Active</li>
                                         </ul>
-                                        <h5><a href="#" th:text="${board.title}" th:href="@{/board/boardDetail/{boardId}/{memberId} (boardId = ${board.boardId} , memberId = ${member.id})}">Boruto: Naruto next generations</a></h5>
+                                        <h5><a href="#" th:text="${board.title}" th:href="@{/board/boardDetail/{boardId}/{memberId} (boardId = ${board.boardId} , memberId = ${board.loginMemberId})}">Boruto: Naruto next generations</a></h5>
                                     </div>
                                 </div>
                             </div>
@@ -143,7 +143,7 @@
                 <img th:src="@{/image/{fileId} (fileId = ${follow.fileId})}" src="img/sidebar/comment-1.jpg" alt="" style="border-radius: 50%; width: 65px; height: 65px;">
             </div>
             <div class="product__sidebar__comment__item__text">
-                <h5><a href="#" th:text="${follow.followNickName}">nickname</a></h5>
+                <h5><a href="#" th:text="${follow.followNickName}" th:href="@{/profile/{followMemberId}/{loginMemberId} (followMemberId = ${follow.followMemberId} , loginMemberId = ${member.memberId})}">nickname</a></h5>
                 <span th:text="|${follow.followerCount} follower|"><i class="fa fa-user-circle"></i> 19.141 follower</span>
             </div>
         </div>

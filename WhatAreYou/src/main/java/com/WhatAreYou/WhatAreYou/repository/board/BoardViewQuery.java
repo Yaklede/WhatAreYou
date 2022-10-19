@@ -16,4 +16,6 @@ public interface BoardViewQuery {
     public Page<Board> findSearchPageAll(BoardSearchCondition condition, Pageable pageable);
 
     public Page<Board> findSearchComplexPageAll(BoardSearchCondition condition, Pageable pageable);
+
+    public Page<Board> findRankingAll(Pageable pageable);
 }

@@ -46,7 +46,7 @@
                     <div class="header__nav">
                         <nav class="header__menu mobile-menu">
                             <ul>
-                                <li><a href="./index.html">Homepage</a></li>
+                                <li class="active"><a href="./index.html">Homepage</a></li>
                                 <li><a href="./categories.html">Categories <span class="arrow_carrot-down"></span></a>
                                     <ul class="dropdown">
                                         <li><a href="./categories.html">Categories</a></li>
@@ -57,7 +57,7 @@
                                         <li><a href="./login.html">Login</a></li>
                                     </ul>
                                 </li>
-                                <li class="active"><a href="./blog.html">Our Blog</a></li>
+                                <li><a href="./blog.html">Our Blog</a></li>
                                 <li><a href="#">Contacts</a></li>
                             </ul>
                         </nav>
@@ -75,78 +75,94 @@
     </header>
     <!-- Header End -->
 
-    <!-- Blog Details Section Begin -->
-    <section class="blog-details spad">
+    <!-- Breadcrumb Begin -->
+    <div class="breadcrumb-option">
         <div class="container">
-            <div class="row d-flex justify-content-center">
-                <div class="col-lg-8">
-                    <div class="blog__details__title">
-                        <h2 th:text="${board.title}">제목</h2>
-                        <div class="product__item__text">
-                            <ul th:each="tag : ${board.hashTags}">
-                                <li th:text="${tag}">tag</li>
-                            </ul>
-                        </div>
-                        <h3 th:text="${board.boardCreator}" style="color : white">작성자</h3>
-                        </div>
-                    </div>
-                </div>
+            <div class="row">
                 <div class="col-lg-12">
-                    <div class="blog__details__pic">
-                        <img th:src="@{/image/{fileId} (fileId = ${board.fileId})}" src="img/blog/details/blog-details-pic.jpg" style="object-fit: scale-down;" alt="">
+                    <div class="breadcrumb__links">
+                        <a href="./index.html"><i class="fa fa-home"></i> Home</a>
+                        <a href="./categories.html">Categories</a>
+                        <span>profile</span>
                     </div>
                 </div>
-                <div class="col-lg-8">
-                    <div class="blog__details__content">
-                        <div class="blog__details__text">
-                            <p th:text="${board.content}">컨텐츠</p>
+            </div>
+        </div>
+    </div>
+    <!-- Breadcrumb End -->
+
+    <!-- Anime Section Begin -->
+    <section class="anime-details spad">
+        <div class="container">
+            <div class="anime__details__content">
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="anime__details__pic set-bg" data-setbg="img/anime/details-pic.jpg">
+                            <img th:src="@{/image/{fileId} (fileId = ${profile.memberFileId})}" style="height : 100%; width : 100%;object-fit: cover; border-radius : 20px;"/>
                         </div>
-                        <div class="row">
-                            <div class="col-lg-8 col-md-8">
-                                <div class="anime__details__review">
-                                    <div class="section-title" style="display: flex; color:white; justify-content: first baseline;">
-                                        <div>
-                                            <form th:if="${board.likeState} == 0" method="post" th:action="@{/like/{boardId}/{memberId} (boardId = ${board.boardId}, memberId = ${board.loginMemberId}) }">
-                                                <button style="color:white; background-color:transparent; outline: 0; border: 0;" type="submit"><i class="fa fa-thumbs-up" style="color:white"></i></button><sapn th:text="${board.likeCount}">99</sapn>
-                                            </form>
-                                            <form th:if="${board.likeState} == 1" method="post" th:action="@{/unlike/{boardId}/{memberId} (boardId = ${board.boardId}, memberId = ${board.loginMemberId}) }">
-                                                <button style="color:white; background-color:transparent; outline: 0; border: 0;" type="submit"><i class="fa fa-thumbs-up" style="color:pink"></i></button><sapn th:text="${board.likeCount}">99</sapn>
-                                            </form>
-                                        </div>
-                                        &nbsp&nbsp&nbsp
-                                        <div>
-                                            <button style="color:white; background-color:transparent; outline: 0; border: 0;"><i class="fa fa-comments"></i></button><sapn th:text="${board.commentCount}">99</sapn>
-                                        </div>
+                    </div>
+                    <div class="col-lg-9">
+                        <div class="anime__details__text">
+                            <div class="anime__details__title">
+                                <h3 th:text="${profile.nickName}">닉네임입니다.</h3>
+                            </div>
+                            <div class="anime__details__widget">
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6">
+                                        <ul>
+                                            <li><span>가입일:</span><span th:text="${#temporals.format(profile.create_at, 'yyyy-MM-dd')}"></li>
+                                            <li><span>작품수:</span><span th:text="${profile.boardCount}"></span></li>
+                                            <li><span>포인트:</span><span>point</span></li>
+                                            <li><span>팔로잉:</span><span th:text="${profile.followingCount}">99</span></li>
+                                            <li><span>팔로워:</span><span th:text="${profile.followerCount}">09</span></li>
+                                        </ul>
                                     </div>
-                                    <div th:each="comment : ${board.comments}" class="anime__review__item">
-                                        <div class="anime__review__item__pic">
-                                            <img src="img/anime/review-1.jpg" th:src="@{/image/{fileId} (fileId = ${comment.memberId})}" alt="">
-                                        </div>
-                                        <div  class="anime__review__item__text">
-                                            <h6 th:text="${comment.nickName}">닉네임 입니다.</h6>
-                                            <p th:text="${comment.comment}">댓글입니다.</p>
-                                            <form th:if="${comment.memberId} == ${board.loginMemberId}" method="post" th:action="@{/unComment/{commentId} (commentId = ${comment.commentId})}">
-                                                <button style="color:white; background-color:transparent; outline: 0; border: 0;" type="submit">삭제</button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                <div class="anime__details__form">
-                                    <div class="section-title">
-                                        <h5>Your Comment</h5>
-                                    </div>
-                                    <form th:action="@{/comment/{boardId}/{memberId} (boardId = ${board.boardId}, memberId = ${board.loginMemberId})}" th:object="${commentForm}" method="post">
-                                        <textarea th:field="*{commentInput}" type="text"/>
-                                        <div class="field-error" th:errors="*{commentInput}"></div>
-                                        <button type="submit"><i class="fa fa-location-arrow"></i> Review</button>
-                                    </form>
                                 </div>
+                            </div>
+                            <div th:if="${loginMember.memberId} == ${profile.loginMemberId}" class="anime__details__btn">
+                                <a href="#" class="watch-btn"><span>프로필 수정</span> <i
+                                        class="fa fa-angle-right"></i></a>
+                            </div>
+                            <div th:if="${loginMember.memberId} != ${profile.loginMemberId}" class="anime__details__btn">
+                                <form id="follow" method="post" th:action="@{/follow/{fromMemberId}/{toMemberId} (fromMemberId = ${profile.loginMemberId} , toMemberId = ${loginMember.memberId})}"></form>
+                                <form id="unfollow" method="post" th:action="@{/unfollow/{fromMemberId}/{toMemberId} (fromMemberId = ${profile.loginMemberId} , toMemberId = ${loginMember.memberId})}"></form>
+                                <th:block th:if="${followState} == 0">
+                                    <a href="#" class="follow-btn" onclick="document.getElementById('follow').submit();"><i class="fa fa-heart-o"></i>팔로우</a>
+                                </th:block>
+                                <th:block th:if="${followState} == 1">
+                                    <a href="#" class="follow-btn" onclick="document.getElementById('unfollow').submit();"><i class="fa fa-heart"></i>언팔로우</a>
+                                </th:block>
+                            </div>
                             </div>
                         </div>
                     </div>
                 </div>
+            <div class="row">
+                <div class="col-lg-8 col-md-8 col-sm-8">
+                    <div class="section-title">
+                        <h4>게시글</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div th:each="board : ${profile.boardDTOS}" class="col-lg-4 col-md-6 col-sm-6">
+                    <div class="product__item">
+                        <div class="product__item__pic set-bg" >
+                            <img th:src="@{/image/{fileId} (fileId = ${board.fileId})}" style="object-fit : cover; height : 100%; width : 100%; border-radius : 20px;"/>
+                            <div class="view"><i class="fa fa-thumbs-up"></i><span th:text="${board.likeCount}">999</span></div>
+                        </div>
+                        <div class="product__item__text">
+                            <ul th:each="tag : ${board.hashTags}">
+                                <li th:text="${tag}">Active</li>
+                            </ul>
+                            <h5><a href="#" th:text="${board.title}" th:href="@{/board/boardDetail/{boardId}/{memberId} (boardId = ${board.boardId} , memberId = ${profile.loginMemberId})}">Boruto: Naruto next generations</a></h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
             </div>
         </section>
-        <!-- Blog Details Section End -->
+        <!-- Anime Section End -->
 
         <!-- Footer Section Begin -->
         <footer class="footer">

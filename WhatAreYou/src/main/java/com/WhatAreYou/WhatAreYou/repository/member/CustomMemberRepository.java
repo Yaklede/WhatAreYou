@@ -6,4 +6,6 @@ import org.springframework.data.domain.Pageable;
 
 public interface CustomMemberRepository {
     public Page<Member> findPageAll(Pageable pageable);
+
+    public Page<Member> findRankingAll(Pageable pageable);
 }

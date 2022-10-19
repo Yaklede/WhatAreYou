@@ -45,7 +45,7 @@ public class MainController {
     private final FileService fileService;
 
     @GetMapping("/")
-    public String indexPage(@SessionAttribute(name = "loginMember", required = false) Member loginMember, Pageable pageable, Model model) {
+    public String indexPage(@SessionAttribute(name = "loginMember", required = false) Member loginMember,Pageable pageable, Model model) {
 
         if (loginMember == null) {
             List<BoardDTO> boards = getBoardDTOS(pageable);
@@ -56,9 +56,9 @@ public class MainController {
             model.addAttribute("follows", follows);
             return "/main/notLogin";
         }
-        List<BoardDTO> boards = getBoardDTOS(pageable);
         List<FollowDTO> follows = getFollowDTOS(pageable);
         List<BoardDTO> boardRanking = getBoardRankingDTOS(pageable);
+        List<BoardDTO> boards = getBoardDTOS(pageable);
         MemberDTO member = MemberDTO.builder().member(loginMember).build();
         model.addAttribute("boards", boards);
         model.addAttribute("follows", follows);
@@ -78,18 +78,19 @@ public class MainController {
         return resource;
     }
 
-    private List<FollowDTO> getFollowDTOS(@PageableDefault(size = 3,sort = "followerCount",direction = Sort.Direction.DESC)Pageable pageable) {
-        Page<Member> PageMember = memberService.findPageAll(pageable);
+    private List<FollowDTO> getFollowDTOS(Pageable pageable) {
+        Page<Member> PageMember = memberService.findRankingAll(pageable);
         List<Member> content = PageMember.getContent();
         return content.stream().map(member ->
                 new FollowDTO(
-                    member.getFileEntity().getId(), member.getNickName(), member.getCreate_at(),
+                    member.getFileEntity().getId(),member.getId(),member.getNickName(), member.getCreate_at(),
                     followService.followerCount(member),
                     boardService.boardCountByMemberId(member.getId()))).collect(Collectors.toList());
     }
 
-    private List<BoardDTO> getBoardRankingDTOS(@PageableDefault(size = 3) Pageable pageable) {
-        Page<Board> PageBoard = boardService.findPageAll(pageable);
+    private List<BoardDTO> getBoardRankingDTOS(Pageable pageable) {
+        Page<Board> PageBoard = boardService.findRankingAll(pageable);
+        log.info("page = {}", pageable.getPageSize());
         List<Board> content = PageBoard.getContent();
         return content.stream().map(board ->
                 new BoardDTO(board, board.getMember(),

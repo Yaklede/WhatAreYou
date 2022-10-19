@@ -15,6 +15,7 @@ public interface MemberService {
     public List<Member> findAll();
 
     public Page<Member> findPageAll(Pageable pageable);
+    public Page<Member> findRankingAll(Pageable pageable);
     public Member findByOne(Long memberId);
     public Member findByLoginId(String loginId);
     public Long join(Member member);

@@ -40,6 +40,11 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public Page<Member> findRankingAll(Pageable pageable) {
+        return memberRepository.findRankingAll(pageable);
+    }
+
+    @Override
     public Member findByOne(Long memberId) {
         return memberRepository.findById(memberId).orElseThrow(() -> new MemberNotFoundException());
     }

@@ -65,6 +65,22 @@ public class BoardViewQueryImpl implements BoardViewQuery {
 
         return new PageImpl<>(content,pageable,count);
     }
+    @Override
+    public Page<Board> findRankingAll(Pageable pageable) {
+        List<Board> content = queryFactory
+                .selectFrom(board)
+                .limit(3)
+                .offset(0)
+                .orderBy(board.likeCount.desc())
+                .fetch();
+
+        Long count = queryFactory
+                .select(board.count())
+                .from(board)
+                .fetchOne();
+
+        return new PageImpl<>(content,pageable,count);
+    }
 
     @Override
     public Page<Board> findSearchPageAll(BoardSearchCondition condition, Pageable pageable) {

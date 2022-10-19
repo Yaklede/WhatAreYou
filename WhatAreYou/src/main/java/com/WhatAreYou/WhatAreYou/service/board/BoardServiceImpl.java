@@ -101,6 +101,11 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    public Page<Board> findRankingAll(Pageable pageable) {
+        return boardRepository.findRankingAll(pageable);
+    }
+
+    @Override
     public Page<Board> findSearchPageAll(BoardSearchCondition condition, Pageable pageable) {
         return boardRepository.findSearchPageAll(condition,pageable);
     }

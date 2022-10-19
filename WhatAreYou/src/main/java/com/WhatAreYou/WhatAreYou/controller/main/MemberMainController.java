@@ -100,7 +100,7 @@ public class MemberMainController {
             session.invalidate();
             log.info("로그아웃 되었습니다.");
         }
-        return "redirect:/test/";
+        return "redirect:/";
     }
 
 

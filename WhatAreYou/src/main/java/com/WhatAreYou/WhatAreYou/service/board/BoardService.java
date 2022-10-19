@@ -21,6 +21,8 @@ public interface BoardService {
 
     public Page<Board> findPageAll(Pageable pageable);
 
+    public Page<Board> findRankingAll(Pageable pageable);
+
     public Page<Board> findSearchPageAll(BoardSearchCondition condition, Pageable pageable);
 
     public Page<Board> findSearchComplexPageAll(BoardSearchCondition condition, Pageable pageable);

@@ -40,4 +40,18 @@ public class CustomMemberRepositoryImpl implements  CustomMemberRepository  {
         long total = memberQueryResults.getTotal();
         return new PageImpl<>(content,pageable,total);
     }
+
+    @Override
+    public Page<Member> findRankingAll(Pageable pageable) {
+        QueryResults<Member> memberQueryResults = queryFactory
+                .selectFrom(member)
+                .limit(3)
+                .offset(0)
+                .orderBy(member.followerCount.desc())
+                .fetchResults();
+
+        List<Member> content = memberQueryResults.getResults();
+        long total = memberQueryResults.getTotal();
+        return new PageImpl<>(content,pageable,total);
+    }
 }

@@ -28,6 +28,55 @@
         border-color: #dc3545;
         color: #dc3545;
         }
+        #notBefore::before {
+            outline:none;
+        }
+        .image-upload{
+    position: relative;
+  margin: 0 auto;
+  overflow: hidden;
+  width:100%;
+}
+.image-upload input {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        opacity: 0;
+    }
+.upload-field {
+  display: block;
+  background: #F4FAFE;
+  padding: 12px;
+  border-radius: 11px;
+
+}
+
+.upload-field .file-thumbnail {
+  cursor: pointer;
+  border: 1px dashed #BBD9EC;
+  border-radius: 11px;
+  text-align: center;
+  padding: 20px;
+}
+
+.upload-field .file-thumbnail img {
+  width: 50px;
+}
+
+.upload-field .file-thumbnail h3 {
+  font-size: 12px;
+  color: #000000;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.upload-field .file-thumbnail p {
+  font-size: 12px;
+  color: #9ABCD1;
+  margin-bottom: 0;
+}
         </style>
 </head>
 
@@ -108,6 +157,17 @@
                             <div th:if="${#fields.hasGlobalErrors()}">
                                 <p class="field-error" th:each="err : ${#fields.globalErrors()}" th:text="${err}">전체 오류 메시지</p>
                             </div>
+                            <div class="image-upload">
+                                <input th:field="*{file}" type="file" name="" id="logo" onchange="fileValue(this)" >
+                                <label for="logo" class="upload-field" id="file-label">
+                                    <div class="file-thumbnail">
+                                        <img id="image-preview" src="https://www.btklsby.go.id/images/placeholder/basic.png" alt="">
+                                        <h3 id="filename">
+                                            IMG
+                                        </h3>
+                                    </div>
+                                </label>
+                            </div>
                             <div class="input__item">
                                 <input th:field="*{createdId}" type="text" class="form-control" readonly>
                                 <div class="field-error" th:errors="*{createdId}"></div>
@@ -118,12 +178,12 @@
                                 <div class="field-error" th:errors="*{title}"></div>
                                 <span class="icon_profile"></span>
                             </div>
-                            <div class="input__item">
-                                <input th:field="*{file}" type= "file"   class="form-control">
-                                <span class="icon_profile"></span>
-                            </div>
-                            <div class="input__item">
-                                <input th:field="*{content}" th:inline="text" th:errorclass="field-error" type="text" cols="30" rows="10" placeholder="enter your Story" class="form-control"></input>
+<!--                            <div class="input__item">-->
+<!--                                <input th:field="*{file}" type= "file"   class="form-control">-->
+<!--                                <span class="icon_profile"></span>-->
+<!--                            </div>-->
+                            <div class="input__item" id="notBefore">
+                                <textarea th:field="*{content}" th:inline="text" th:errorclass="field-error" type="text" cols="30" rows="10" placeholder="             enter your Content Story" class="form-control"></textarea>
                                 <div class="field-error" th:errors="*{content}"></div>
                                 <span class="icon_profile"></span>
                             </div>
@@ -194,6 +254,19 @@
     <script src="/main/js/jquery.slicknav.js"></script>
     <script src="/main/js/owl.carousel.min.js"></script>
     <script src="/main/js/main.js"></script>
+    <script>
+              function fileValue(value) {
+            var path = value.value;
+            var extenstion = path.split('.').pop();
+            if(extenstion == "jpg" || extenstion == "svg" || extenstion == "jpeg" || extenstion == "png"|| extenstion == "gif"){
+                document.getElementById('image-preview').src = window.URL.createObjectURL(value.files[0]);
+                var filename = path.replace(/^.*[\\\/]/, '').split('.').slice(0, -1).join('.');
+                document.getElementById("filename").innerHTML = filename;
+            }else{
+                alert("File not supported. Kindly Upload the Image of below given extension ")
+            }
+        }
+    </script>
 
 </body>
 

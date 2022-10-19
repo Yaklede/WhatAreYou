@@ -9,12 +9,13 @@ public class MemberDTO {
     private Long memberId;
     private Long fileId;
     private String loginId;
-
+    private Long followState;
     @Builder
     public MemberDTO(Member member) {
         this.memberId = member.getId();
         this.fileId = member.getFileEntity().getId();
         this.loginId = member.getLoginId();
+
     }
 }
 

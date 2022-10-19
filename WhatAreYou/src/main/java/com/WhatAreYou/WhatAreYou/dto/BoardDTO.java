@@ -22,6 +22,8 @@ public class BoardDTO {
     private Long likeCount;
     private Long likeState;
     private Long commentCount;
+    private Long followingCount;
+    private Long followerCount;
     List<CommentDTO> comments;
     String[] hashTags;
 
@@ -61,5 +63,6 @@ public class BoardDTO {
         this.likeCount = likeCount;
         this.hashTags = hashTags;
     }
+
 
 }
