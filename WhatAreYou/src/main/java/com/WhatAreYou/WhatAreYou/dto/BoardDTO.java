@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 @Data
 public class BoardDTO {
     private Long boardId;
+    private Long boardCreateMemberId;
     private Long fileId;
     private Long loginMemberId;
     private String loginId;
@@ -41,6 +42,7 @@ public class BoardDTO {
         this.comments = comments.stream().map(comment -> new CommentDTO(comment)).collect(Collectors.toList());
         this.hashTags = hashTags;
         this.commentCount = commentCount;
+        this.boardCreateMemberId = board.getMember().getId();
     }
 
     public BoardDTO(Board board, Member loginMember) {

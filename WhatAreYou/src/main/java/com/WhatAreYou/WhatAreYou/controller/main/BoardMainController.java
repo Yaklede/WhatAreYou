@@ -4,6 +4,7 @@ import com.WhatAreYou.WhatAreYou.domain.*;
 import com.WhatAreYou.WhatAreYou.dto.BoardDTO;
 import com.WhatAreYou.WhatAreYou.dto.form.board.BoardForm;
 import com.WhatAreYou.WhatAreYou.dto.form.board.BoardSearchCondition;
+import com.WhatAreYou.WhatAreYou.dto.form.board.BoardUpdateForm;
 import com.WhatAreYou.WhatAreYou.dto.form.comment.CommentForm;
 import com.WhatAreYou.WhatAreYou.service.board.BoardService;
 import com.WhatAreYou.WhatAreYou.service.comment.CommentService;
@@ -67,17 +68,46 @@ public class BoardMainController {
         return "redirect:/";
     }
 
+    @GetMapping("/update/{boardId}")
+    public String updateView(@PathVariable("boardId") Long boardId,Model model) {
+        Board findBoard = boardService.findByBoardId(boardId);
+        BoardUpdateForm form = BoardUpdateForm.builder().content(findBoard.getContent()).file(null).title(findBoard.getTitle()).hashTag(findBoard.getHashTags().getTag())
+                .boardId(findBoard.getId())
+                .createdId(findBoard.getMember().getNickName())
+                .build();
+        model.addAttribute("form", form);
+        return "/main/board/update";
+    }
+
+    @PostMapping("/update/{boardId}")
+    public String update(@PathVariable("boardId") Long boardId,@ModelAttribute("form") BoardUpdateForm form,BindingResult bindingResult) {
+        if (form.getHashTag().isEmpty()) {
+            HashTag hashTag = hashTagService.findByBoardId(boardId);
+            form.setHashTag(hashTag.getTag());
+        } else if (!form.getHashTag().substring(0, 1).equals("#") || form.getHashTag().contains(",")) {
+            if (form.getHashTag().contains(",")) {
+                bindingResult.reject("태그에는 , 불가", "ex)#태그#태그2 형식으로 작성해야 하고 , 는 사용이 불가능합니다.");
+                return "/main/board/update";
+            } else {
+                bindingResult.reject("태그에는 # 필수", "해시태그에는 #이 필수입니다.");
+                return "/main/board/update";
+            }
+        }
+        boardService.update(boardId,form);
+        return "redirect:/";
+    }
+
     private String BoardValidator(BoardForm form, BindingResult bindingResult) {
         if (!form.getHashTag().substring(0, 1).equals("#") || form.getHashTag().contains(",") || form.getFile().isEmpty()) {
             if (form.getHashTag().contains(",")) {
-                bindingResult.reject("태그에는 , 불가","ex)#태그#태그2 형식으로 작성해야 하고 , 는 사용이 불가능합니다.");
+                bindingResult.reject("태그에는 , 불가", "ex)#태그#태그2 형식으로 작성해야 하고 , 는 사용이 불가능합니다.");
                 return "/main/board/create";
             }
             if (form.getFile().isEmpty()) {
-                bindingResult.reject("이미지 없음","게시글에 이미지는 필수입니다..");
+                bindingResult.reject("이미지 없음", "게시글에 이미지는 필수입니다..");
                 return "/main/board/create";
             }
-            bindingResult.reject("태그에는 # 필수","해시태그에는 #이 필수입니다.");
+            bindingResult.reject("태그에는 # 필수", "해시태그에는 #이 필수입니다.");
             return "/main/board/create";
 
         }
@@ -90,19 +120,9 @@ public class BoardMainController {
         likeService.BoardDeleteLike(boardId);
         hashTagService.delete(boardId);
         boardService.delete(boardId);
-        return "redirect:/board";
+        return "redirect:/";
     }
 
-    @GetMapping("/boards")
-    public String boardsView(@SessionAttribute("loginMember") Member loginMember,@ModelAttribute("condition") BoardSearchCondition condition, @PageableDefault(size = 1) Pageable pageable, Model model) {
-        Page<Board> pageBoards = boardService.findSearchPageAll(condition,pageable);
-        List<Board> boards = pageBoards.getContent();
-        int totalPages = pageBoards.getTotalPages();
-        List<BoardDTO> boardDTOList = boards.stream().map(board -> new BoardDTO(board, loginMember)).collect(Collectors.toList());
-        model.addAttribute("boards", boardDTOList);
-        model.addAttribute("totalPages", totalPages);
-        return "/test/board/boardList";
-    }
 
     /**
      * model 에 board 하나로만 전달 할 수 있게 수정 해야함

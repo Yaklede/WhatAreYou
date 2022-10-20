@@ -27,4 +27,8 @@ public class HashTag {
         this.tag = tag;
         this.board = board;
     }
+
+    public void tagUpdate(String tag) {
+        this.tag = tag;
+    }
 }

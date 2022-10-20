@@ -3,12 +3,15 @@ package com.WhatAreYou.WhatAreYou.service.board;
 import com.WhatAreYou.WhatAreYou.domain.Board;
 import com.WhatAreYou.WhatAreYou.domain.FileEntity;
 import com.WhatAreYou.WhatAreYou.domain.HashTag;
+import com.WhatAreYou.WhatAreYou.domain.Member;
 import com.WhatAreYou.WhatAreYou.dto.form.board.BoardSearchCondition;
 import com.WhatAreYou.WhatAreYou.dto.form.board.BoardUpdateForm;
+import com.WhatAreYou.WhatAreYou.dto.form.member.MemberUpdateForm;
 import com.WhatAreYou.WhatAreYou.exception.BoardNotFoundException;
 import com.WhatAreYou.WhatAreYou.repository.board.BoardRepository;
 import com.WhatAreYou.WhatAreYou.repository.file.FileRepository;
 import com.WhatAreYou.WhatAreYou.repository.hashtag.HashTagRepository;
+import com.WhatAreYou.WhatAreYou.service.file.FileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -17,6 +20,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -28,6 +32,7 @@ public class BoardServiceImpl implements BoardService {
     private final BoardRepository boardRepository;
     private final FileRepository fileRepository;
     private final HashTagRepository hashTagRepository;
+    private final FileService fileService;
 
     @Transactional
     @Override
@@ -56,32 +61,32 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public void update(Long boardId,BoardUpdateForm updateForm) {
         Board findBoard = boardRepository.findById(boardId).orElseThrow(() -> new BoardNotFoundException());
-        validationUpdateForm(updateForm, findBoard);
+        validationUpdate(updateForm, findBoard);
     }
 
-    private void validationUpdateForm(BoardUpdateForm updateForm, Board findBoard) {
-        if (updateForm.getTitle() == null || updateForm.getContent() == null || updateForm.getFile() == null || updateForm.getHashTag() == null) {
-            if (updateForm.getTitle() == null) {
-                updateForm.setTitle(findBoard.getTitle());
-            } else if (updateForm.getContent() == null) {
-                updateForm.setContent(findBoard.getContent());
-            } else if (updateForm.getFile() == null) {
-                updateForm.setFileId(findBoard.getFileEntity().getId());
-            } else if(updateForm.getHashTag() == null) {
-                updateForm.setHashTag(findBoard.getHashTags().getTag());
+    private void validationUpdate(BoardUpdateForm updateForm, Board findBoard) {
+        try {
+            if (updateForm.getFile() == null || updateForm.getFile().isEmpty()) {
+                FileEntity updateFile = fileService.findByBoardId(findBoard.getId());
+                updateForm.setFileEntity(updateFile);
+                findBoard.updateBoard(updateForm);
+                HashTag tag = hashTagRepository.findByBoardId(findBoard.getId());
+                tag.tagUpdate(updateForm.getHashTag());
+            } else if (updateForm.getFile() != null) {
+                FileEntity updateFile = fileService.findByBoardId(findBoard.getId());
+                log.info("file = {}", updateFile.getId());
+                Long updateFileId = fileService.updateFile(updateFile, updateForm.getFile());
+                updateForm.setFileEntity(fileService.findByOne(updateFileId));
+                HashTag tag = hashTagRepository.findByBoardId(findBoard.getId());
+                tag.tagUpdate(updateForm.getHashTag());
+                findBoard.updateBoard(updateForm);
             }
-        }  else if(updateForm.getTitle().isEmpty() || updateForm.getContent().isEmpty() || updateForm.getFile().isEmpty() || updateForm.getHashTag().isEmpty()) {
-            if (updateForm.getTitle().isEmpty()) {
-                updateForm.setTitle(findBoard.getTitle());
-            } else if (updateForm.getContent().isEmpty()) {
-                updateForm.setContent(findBoard.getContent());
-            } else if (updateForm.getFile().isEmpty()) {
-                updateForm.setFileId(findBoard.getFileEntity().getId());
-            } else if (updateForm.getHashTag().isEmpty()) {
-                updateForm.setHashTag(findBoard.getHashTags().getTag());
-            }
+            HashTag tag = hashTagRepository.findByBoardId(findBoard.getId());
+            tag.tagUpdate(updateForm.getHashTag());
+            findBoard.updateBoard(updateForm);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
     }
 
 

@@ -7,6 +7,7 @@ import com.WhatAreYou.WhatAreYou.domain.Member;
 import com.WhatAreYou.WhatAreYou.dto.BoardDTO;
 import com.WhatAreYou.WhatAreYou.dto.MemberDTO;
 import com.WhatAreYou.WhatAreYou.dto.ProfileDTO;
+import com.WhatAreYou.WhatAreYou.dto.form.member.MemberUpdateForm;
 import com.WhatAreYou.WhatAreYou.service.board.BoardService;
 import com.WhatAreYou.WhatAreYou.service.comment.CommentService;
 import com.WhatAreYou.WhatAreYou.service.file.FileService;
@@ -23,7 +24,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -43,6 +46,7 @@ public class ProfileController {
     @GetMapping("/profile/{memberId}")
     public String profile(@PathVariable("memberId") Long memberId,Model model) {
         Member member = memberService.findByOne(memberId);
+        log.info("member = {}", member.getLoginId());
         MemberDTO loginMember = MemberDTO.builder().member(member).build();
         ProfileDTO profile = ProfileDTO.builder()
                 .boardCount(boardService.boardCountByMemberId(memberId))
@@ -78,7 +82,6 @@ public class ProfileController {
         model.addAttribute("followState", followState);
         return "/main/board/profile";
     }
-
 
 
     private List<BoardDTO> getBoardDTOS(Long memberId) {

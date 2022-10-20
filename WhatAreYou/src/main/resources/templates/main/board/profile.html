@@ -120,7 +120,12 @@
                                 </div>
                             </div>
                             <div th:if="${loginMember.memberId} == ${profile.loginMemberId}" class="anime__details__btn">
-                                <a href="#" class="watch-btn"><span>프로필 수정</span> <i
+                                <form id="update" method="get" th:action="@{/member/update/{memberId} (memberId = ${profile.loginMemberId})}"></form>
+                                <a href="#" class="watch-btn" onclick="document.getElementById('update').submit();"><span>프로필 수정</span> <i
+                                        class="fa fa-angle-right"></i></a>
+                                <br>
+                                <form id="delete" method="post" th:action="@{/member/delete/{memberId} (memberId = ${profile.loginMemberId})}"></form>
+                                <a href="#" class="watch-btn" onclick="document.getElementById('delete').submit();"><span>회원 탈퇴</span> <i
                                         class="fa fa-angle-right"></i></a>
                             </div>
                             <div th:if="${loginMember.memberId} != ${profile.loginMemberId}" class="anime__details__btn">

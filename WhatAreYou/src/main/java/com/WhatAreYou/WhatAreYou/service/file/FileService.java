@@ -14,6 +14,8 @@ public interface FileService {
 
     public FileEntity findByOne(Long fileEntityId);
 
-    public List<FileEntity> findByBoardId(Long boardId);
+    public FileEntity findByBoardId(Long boardId);
+
+    public FileEntity findByMemberId(Long memberId);
 
 }

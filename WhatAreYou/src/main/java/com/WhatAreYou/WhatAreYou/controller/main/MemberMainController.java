@@ -2,6 +2,7 @@ package com.WhatAreYou.WhatAreYou.controller.main;
 
 import com.WhatAreYou.WhatAreYou.domain.FileEntity;
 import com.WhatAreYou.WhatAreYou.domain.Member;
+import com.WhatAreYou.WhatAreYou.dto.MemberDTO;
 import com.WhatAreYou.WhatAreYou.dto.form.member.JoinForm;
 import com.WhatAreYou.WhatAreYou.dto.form.member.LoginForm;
 import com.WhatAreYou.WhatAreYou.dto.form.member.MemberDeleteForm;
@@ -109,40 +110,66 @@ public class MemberMainController {
      * 어드민만 get 으로 모든 사용자 조회 후 수정 가능
      * 일반 유저는 post 요청으로 update , delete 가능
      */
-    @GetMapping("/delete")
-    public String deleteForm(Model model) {
-        List<Member> findMembers = memberService.findAll();
-        List<MemberDeleteForm> members = findMembers.stream().map(member -> new MemberDeleteForm(member)).collect(Collectors.toList());
-        model.addAttribute("members", members);
-        return "/test/member/delete";
-    }
+//    @GetMapping("/delete")
+//    public String deleteForm(Model model) {
+//        List<Member> findMembers = memberService.findAll();
+//        List<MemberDeleteForm> members = findMembers.stream().map(member -> new MemberDeleteForm(member)).collect(Collectors.toList());
+//        model.addAttribute("members", members);
+//        return "/test/member/delete";
+//    }
     @PostMapping("/delete/{memberId}")
-    public String delete(@PathVariable("memberId") Long memberId) {
+    public String delete(@PathVariable("memberId") Long memberId , HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if(session != null) {
+            session.invalidate();
+        }
         followService.deleteAll(memberId);
         boardService.deleteAllByMemberId(memberId);
         memberService.delete(memberId);
-        return "redirect:/test/";
-    }
-
-    @GetMapping("/updateList")
-    public String updateList(Model model) {
-        List<Member> findMember = memberService.findAll();
-        List<MemberUpdateForm> members = findMember.stream().map(member -> new MemberUpdateForm(member)).collect(Collectors.toList());
-        model.addAttribute("members", members);
-        return "/test/member/updateList";
+        return "redirect:/";
     }
 
     @GetMapping("/update/{memberId}")
-    public String updateForm(@PathVariable("memberId")Long memberId, Model model) {
+    public String update(@PathVariable("memberId") Long memberId, Model model) {
         Member findMember = memberService.findByOne(memberId);
-        MemberUpdateForm updateForm = new MemberUpdateForm(findMember);
-        model.addAttribute("updateForm", updateForm);
-        return "test/member/update";
+        MemberDTO member = MemberDTO.builder().member(findMember).build();
+        MemberUpdateForm form = MemberUpdateForm.builder()
+                .age(findMember.getAge())
+                .email(findMember.getEmail())
+                .nickName(findMember.getNickName())
+                .password(findMember.getPassword())
+                .file(null)
+                .build();
+        model.addAttribute("member", member);
+        model.addAttribute("form", form);
+        return "/main/member/update";
     }
 
     @PostMapping("/update/{memberId}")
-    public String update(@PathVariable("memberId")Long memberId, @ModelAttribute("updateForm") MemberUpdateForm updateForm) {
-        memberService.update(memberId,updateForm);
-        return "redirect:/test/";
+    public String updatePost(@PathVariable("memberId") Long memberId,@ModelAttribute("form") MemberUpdateForm form) {
+        memberService.update(memberId,form);
+        return "redirect:/profile/{memberId}";
     }
+
+//    @GetMapping("/updateList")
+//    public String updateList(Model model) {
+//        List<Member> findMember = memberService.findAll();
+//        List<MemberUpdateForm> members = findMember.stream().map(member -> new MemberUpdateForm(member)).collect(Collectors.toList());
+//        model.addAttribute("members", members);
+//        return "/test/member/updateList";
+//    }
+//
+//    @GetMapping("/update/{memberId}")
+//    public String updateForm(@PathVariable("memberId")Long memberId, Model model) {
+//        Member findMember = memberService.findByOne(memberId);
+//        MemberUpdateForm updateForm = new MemberUpdateForm(findMember);
+//        model.addAttribute("updateForm", updateForm);
+//        return "test/member/update";
+//    }
+//
+//    @PostMapping("/update/{memberId}")
+//    public String update(@PathVariable("memberId")Long memberId, @ModelAttribute("updateForm") MemberUpdateForm updateForm) {
+//        memberService.update(memberId,updateForm);
+//        return "redirect:/test/";
+//    }
 }

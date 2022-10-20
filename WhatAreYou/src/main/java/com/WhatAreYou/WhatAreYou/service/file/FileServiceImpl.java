@@ -44,7 +44,7 @@ public class FileServiceImpl implements FileService {
         FileEntity findFile = fileRepository.findById(updateFile.getId()).orElseThrow(() -> new FileNotFoundException());
         updateFile(multipartFile, findFile);
         multipartFile.transferTo(new File(findFile.getSavePath()));
-        return null;
+        return updateFile.getId();
     }
 
     @Override
@@ -53,16 +53,23 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public List<FileEntity> findByBoardId(Long boardId) {
+    public FileEntity findByBoardId(Long boardId) {
         return fileRepository.findByBoardId(boardId);
     }
 
-    private void updateFile(MultipartFile multipartFile, FileEntity findFile) {
+    @Override
+    public FileEntity findByMemberId(Long memberId) {
+        return fileRepository.findByMemberId(memberId);
+    }
+
+    private Long updateFile(MultipartFile multipartFile, FileEntity findFile) {
         FileEntity newFile = createFile(multipartFile);
 
         findFile.setOrgNm(newFile.getSaveNm());
         findFile.setSaveNm(newFile.getSaveNm());
         findFile.setSavePath(newFile.getSavePath());
+        return findFile.getId();
+
     }
 
     private FileEntity createFile(MultipartFile file) {

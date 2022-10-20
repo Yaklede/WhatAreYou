@@ -1,11 +1,13 @@
 package com.WhatAreYou.WhatAreYou.service.member;
 
 import com.WhatAreYou.WhatAreYou.domain.Board;
+import com.WhatAreYou.WhatAreYou.domain.FileEntity;
 import com.WhatAreYou.WhatAreYou.domain.Member;
 import com.WhatAreYou.WhatAreYou.dto.form.member.MemberUpdateForm;
 import com.WhatAreYou.WhatAreYou.exception.MemberNotFoundException;
 import com.WhatAreYou.WhatAreYou.exception.NotEnoughStockException;
 import com.WhatAreYou.WhatAreYou.repository.board.BoardRepository;
+import com.WhatAreYou.WhatAreYou.repository.file.FileRepository;
 import com.WhatAreYou.WhatAreYou.repository.member.MemberRepository;
 import com.WhatAreYou.WhatAreYou.service.file.FileService;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -93,15 +96,21 @@ public class MemberServiceImpl implements MemberService {
     }
 
     private void validationUpdate(MemberUpdateForm updateForm, Member member) {
-        if (updateForm.getPassword().isEmpty() || updateForm.getPassword() == null) {
-            updateForm.setPassword(member.getPassword());
+        try {
+             if (updateForm.getFile() == null || updateForm.getFile().isEmpty()) {
+                FileEntity updateFile = fileService.findByMemberId(member.getId());
+                updateForm.setFileEntity(updateFile);
+                member.updateMember(updateForm);
+            } else if (updateForm.getFile() != null) {
+                FileEntity updateFile = fileService.findByMemberId(member.getId());
+                log.info("file = {}", updateFile.getId());
+                Long updateFileId = fileService.updateFile(updateFile, updateForm.getFile());
+                updateForm.setFileEntity(fileService.findByOne(updateFileId));
+                member.updateMember(updateForm);
+            }
             member.updateMember(updateForm);
-        } else if (updateForm.getEmail().isEmpty() || updateForm.getEmail() == null) {
-            updateForm.setEmail(member.getEmail());
-            member.updateMember(updateForm);
-        } else if (updateForm.getNickName().isEmpty() || updateForm.getNickName() == null) {
-            updateForm.setNickName(member.getNickName());
-            member.updateMember(updateForm);
-        } else member.updateMember(updateForm);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

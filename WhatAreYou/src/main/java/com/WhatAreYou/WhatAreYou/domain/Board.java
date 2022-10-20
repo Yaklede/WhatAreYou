@@ -48,10 +48,10 @@ public class Board extends BaseEntity {
         this.fileEntity = fileEntity;
     }
 
-    public void changeBoard(BoardUpdateForm form) {
+    public void updateBoard(BoardUpdateForm form) {
         this.title = form.getTitle();
         this.content = form.getContent();
-
+        this.fileEntity = form.getFileEntity();
     }
 
     public void addLikeCount(Long likeCount) {

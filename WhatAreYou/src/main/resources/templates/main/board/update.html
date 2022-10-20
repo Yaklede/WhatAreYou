@@ -136,7 +136,7 @@
             <div class="row">
                 <div class="col-lg-12 text-center">
                     <div class="normal__breadcrumb__text">
-                        <h2>일러스트 업로드</h2>
+                        <h2>일러스트 업데이트</h2>
                         <p>Welcome to the official Anime blog.</p>
                         <span class="field-error" th:if="${message == '이미 존재하는 회원입니다.'}">이미 존재하는 회원입니다.</span>
                     </div>
@@ -152,8 +152,8 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class="login__form">
-                        <h3>일러스트 업로드</h3>
-                        <form th:action="@{/board/create/{memberId} (memberId = ${boardForm.createdId})}" th:object="${boardForm}" method="post" enctype="multipart/form-data">
+                        <h3>일러스트 업데이트</h3>
+                        <form th:action="@{/board/update/{boardId} (boardId = ${form.boardId})}" th:object="${form}" method="post" enctype="multipart/form-data">
                             <div th:if="${#fields.hasGlobalErrors()}">
                                 <p class="field-error" th:each="err : ${#fields.globalErrors()}" th:text="${err}">전체 오류 메시지</p>
                             </div>

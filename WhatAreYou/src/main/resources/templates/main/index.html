@@ -112,7 +112,7 @@
                                         <ul th:each="tag : ${board.hashTags}">
                                             <li th:text="${tag}">Active</li>
                                         </ul>
-                                        <h5><a href="#" th:text="${board.title}" th:href="@{/board/boardDetail/{boardId}/{memberId} (boardId = ${board.boardId} , memberId = ${board.loginMemberId})}">Boruto: Naruto next generations</a></h5>
+                                        <h5><a href="#" th:text="${board.title}" th:href="@{/board/boardDetail/{boardId}/{memberId} (boardId = ${board.boardId} , memberId = ${member.memberId})}">Boruto: Naruto next generations</a></h5>
                                     </div>
                                 </div>
                             </div>

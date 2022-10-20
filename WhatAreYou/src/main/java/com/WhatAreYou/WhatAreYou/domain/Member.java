@@ -19,20 +19,10 @@ public class Member extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
     private Long id;
-
-    @NotEmpty
     private String loginId;
-
-    @NotEmpty
     private String password;
-
-    @NotEmpty
     private String nickName;
-
-    @NotEmpty
     private String email;
-
-    @NotNull
     private int age;
 
     @OneToMany(mappedBy = "member",cascade = CascadeType.ALL)
@@ -61,6 +51,7 @@ public class Member extends BaseEntity {
         this.nickName = updateForm.getNickName();
         this.age = updateForm.getAge();
         this.email = updateForm.getEmail();
+        this.fileEntity = updateForm.getFileEntity();
     }
 
     public void addFollowerCount(Long followerCount) {
