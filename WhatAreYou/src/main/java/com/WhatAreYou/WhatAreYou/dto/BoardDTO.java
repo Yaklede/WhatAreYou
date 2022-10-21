@@ -25,11 +25,12 @@ public class BoardDTO {
     private Long commentCount;
     private Long followingCount;
     private Long followerCount;
+    private int totalPage;
     List<CommentDTO> comments;
     String[] hashTags;
 
     @Builder
-    public BoardDTO(Board board, Member loginMember, Long likeState, Long likeCount, List<Comment> comments,String[] hashTags,Long commentCount) {
+    public BoardDTO(Board board, Member loginMember, Long likeState, Long likeCount, List<Comment> comments,String[] hashTags,Long commentCount,int totalPage) {
         this.boardId = board.getId();
         this.fileId = board.getFileEntity().getId();
         this.loginMemberId = loginMember.getId();
@@ -43,6 +44,7 @@ public class BoardDTO {
         this.hashTags = hashTags;
         this.commentCount = commentCount;
         this.boardCreateMemberId = board.getMember().getId();
+        this.totalPage = totalPage;
     }
 
     public BoardDTO(Board board, Member loginMember) {

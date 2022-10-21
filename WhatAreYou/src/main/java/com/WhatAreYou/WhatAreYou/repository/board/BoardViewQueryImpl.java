@@ -21,6 +21,7 @@ import org.springframework.util.StringUtils;
 import javax.persistence.EntityManager;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.WhatAreYou.WhatAreYou.domain.QBoard.*;
@@ -51,19 +52,17 @@ public class BoardViewQueryImpl implements BoardViewQuery {
 
     @Override
     public Page<Board> findPageAll(Pageable pageable) {
-        List<Board> content = queryFactory
+        QueryResults<Board> results = queryFactory
                 .selectFrom(board)
                 .limit(pageable.getPageSize())
                 .offset(pageable.getOffset())
                 .orderBy(board.likeCount.desc())
-                .fetch();
+                .fetchResults();
 
-        Long count = queryFactory
-                .select(board.count())
-                .from(board)
-                .fetchOne();
+        List<Board> content = results.getResults();
+        long total = results.getTotal();
 
-        return new PageImpl<>(content,pageable,count);
+        return new PageImpl<>(content,pageable,total);
     }
     @Override
     public Page<Board> findRankingAll(Pageable pageable) {
@@ -123,7 +122,7 @@ public class BoardViewQueryImpl implements BoardViewQuery {
         return PageableExecutionUtils.getPage(content, pageable,count::fetchCount);
     }
 
-    private BooleanExpression tagEq(String tag) {
+    private BooleanExpression tagContain(String tag) {
         return StringUtils.hasText(tag) ? hashTag.tag.eq(tag) : null;
     }
 
@@ -137,12 +136,17 @@ public class BoardViewQueryImpl implements BoardViewQuery {
                 String decodeQuery = URLDecoder.decode(query, "UTF-8").replaceAll(" ", "");
                 log.info("decode Query = {}",decodeQuery);
                 String[] split = decodeQuery.split("#");
-                if (decodeQuery.substring(0, 1).equals("#")) {
-                    String ExTag = "#" + split[1];
-                    log.info("tag = {}", ExTag);
-                    return hashTag.tag.contains(decodeQuery).or(hashTag.tag.contains(ExTag));
+                if (decodeQuery.contains("#")) {
+                    if (decodeQuery.substring(0, 1).equals("#")) {
+                        String ExTag = "#" + split[1];
+                        log.info("tag = {}", ExTag);
+                        return hashTag.tag.contains(decodeQuery).or(hashTag.tag.contains(ExTag));
+                    }
+                    else {
+                        return board.title.contains(split[0]).or(hashTag.tag.contains(split[1]));
+                    }
                 } else {
-                    return board.title.contains(split[0]);
+                    return board.title.contains(decodeQuery);
                 }
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();

@@ -148,7 +148,7 @@
                 <div class="col-lg-6">
                     <div class="login__form">
                         <h3>Member Update</h3>
-                        <form th:action="@{/profile/update/{memberId} (memberId = ${member.memberId})}" th:object="${form}" method="post" enctype="multipart/form-data">
+                        <form th:action="@{/member/update/{memberId} (memberId = ${member.memberId})}" th:object="${form}" method="post" enctype="multipart/form-data">
                             <div th:if="${#fields.hasGlobalErrors()}">
                                 <p class="field-error" th:each="err : ${#fields.globalErrors()}" th:text="${err}">전체 오류 메시지</p>
                             </div>

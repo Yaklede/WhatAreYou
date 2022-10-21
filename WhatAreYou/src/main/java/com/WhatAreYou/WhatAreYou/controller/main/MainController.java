@@ -4,6 +4,8 @@ import com.WhatAreYou.WhatAreYou.domain.*;
 import com.WhatAreYou.WhatAreYou.dto.BoardDTO;
 import com.WhatAreYou.WhatAreYou.dto.FollowDTO;
 import com.WhatAreYou.WhatAreYou.dto.MemberDTO;
+import com.WhatAreYou.WhatAreYou.dto.PageDTO;
+import com.WhatAreYou.WhatAreYou.dto.form.board.BoardSearchCondition;
 import com.WhatAreYou.WhatAreYou.service.board.BoardService;
 import com.WhatAreYou.WhatAreYou.service.comment.CommentService;
 import com.WhatAreYou.WhatAreYou.service.file.FileService;
@@ -21,10 +23,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.Comparator;
@@ -45,26 +44,73 @@ public class MainController {
     private final FileService fileService;
 
     @GetMapping("/")
-    public String indexPage(@SessionAttribute(name = "loginMember", required = false) Member loginMember,Pageable pageable, Model model) {
+    public String indexPage(@SessionAttribute(name = "loginMember", required = false) Member loginMember,@PageableDefault(size = 1) Pageable pageable, Model model) {
 
         if (loginMember == null) {
-            List<BoardDTO> boards = getBoardDTOS(pageable);
+            BoardSearchCondition condition = new BoardSearchCondition();
+            PageDTO pageDTOS = getPageDTOS(condition,pageable);
             List<FollowDTO> follows = getFollowDTOS(pageable);
             List<BoardDTO> boardRanking = getBoardRankingDTOS(pageable);
-            model.addAttribute("boards", boards);
+            model.addAttribute("boards", pageDTOS.getContent());
+            model.addAttribute("totalPage", pageDTOS.getTotalPage());
             model.addAttribute("rankings", boardRanking);
             model.addAttribute("follows", follows);
+            model.addAttribute("condition",condition);
             return "/main/notLogin";
         }
+        BoardSearchCondition condition = new BoardSearchCondition();
         List<FollowDTO> follows = getFollowDTOS(pageable);
         List<BoardDTO> boardRanking = getBoardRankingDTOS(pageable);
-        List<BoardDTO> boards = getBoardDTOS(pageable);
         MemberDTO member = MemberDTO.builder().member(loginMember).build();
-        model.addAttribute("boards", boards);
+        PageDTO pageDTOS = getPageDTOS(condition, pageable);
+
+        model.addAttribute("boards", pageDTOS.getContent());
+        model.addAttribute("totalPage", pageDTOS.getTotalPage());
         model.addAttribute("follows", follows);
         model.addAttribute("rankings", boardRanking);
         model.addAttribute("member", member);
+        model.addAttribute("condition",condition);
         return "/main/index";
+    }
+
+    @GetMapping("/search")
+    public String search(@SessionAttribute(name = "loginMember", required = false) Member loginMember,@ModelAttribute("condition") BoardSearchCondition condition,@PageableDefault(size = 1,sort = "id") Pageable pageable,Model model) {
+        if (loginMember == null) {
+            PageDTO pageDTOS = getPageDTOS(condition, pageable);
+            model.addAttribute("boards", pageDTOS.getContent());
+            model.addAttribute("totalPage", pageDTOS.getTotalPage());
+            model.addAttribute("condition", condition);
+            return "/main/board/searchNotLoginPage";
+        }
+
+        MemberDTO member = MemberDTO.builder().member(loginMember).build();
+        PageDTO pageDTOS = getPageDTOS(condition, pageable);
+
+        model.addAttribute("boards", pageDTOS.getContent());
+        model.addAttribute("totalPage", pageDTOS.getTotalPage());
+        model.addAttribute("condition", condition);
+        model.addAttribute("member", member);
+        return "/main/board/searchLoginPage";
+    }
+    @GetMapping("/searchPage")
+    public String searchPage(@SessionAttribute(name = "loginMember", required = false) Member loginMember,@RequestParam("query")String query,@PageableDefault(size = 1,sort = "id") Pageable pageable,Model model) {
+        if (loginMember == null) {
+            BoardSearchCondition condition = new BoardSearchCondition(query);
+            PageDTO pageDTOS = getPageDTOS(condition, pageable);
+            model.addAttribute("boards", pageDTOS.getContent());
+            model.addAttribute("totalPage", pageDTOS.getTotalPage());
+            model.addAttribute("condition", condition);
+            return "/main/board/searchNotLoginPage";
+        }
+        BoardSearchCondition condition = new BoardSearchCondition(query);
+        MemberDTO member = MemberDTO.builder().member(loginMember).build();
+        PageDTO pageDTOS = getPageDTOS(condition, pageable);
+
+        model.addAttribute("boards", pageDTOS.getContent());
+        model.addAttribute("totalPage", pageDTOS.getTotalPage());
+        model.addAttribute("condition", condition);
+        model.addAttribute("member", member);
+        return "/main/board/searchLoginPage";
     }
 
     @ResponseBody
@@ -96,17 +142,21 @@ public class MainController {
                 new BoardDTO(board, board.getMember(),
                         likeService.BoardLikeCount(board.getId()),
                         commentService.countByBoardId(board.getId()),
-                        getHashTags(board))).collect(Collectors.toList());
+                        getHashTags(board)))
+                .collect(Collectors.toList());
     }
-    private List<BoardDTO> getBoardDTOS(@PageableDefault(size = 20) Pageable pageable) {
-        Page<Board> PageBoard = boardService.findPageAll(pageable);
+    private PageDTO getPageDTOS(BoardSearchCondition condition,Pageable pageable) {
+        Page<Board> PageBoard = boardService.findSearchPageAll(condition,pageable);
         List<Board> content = PageBoard.getContent();
-        return content.stream().map(board ->
+        List<BoardDTO> boardDTOS = content.stream().map(board ->
                 new BoardDTO(board, board.getMember(),
                         likeService.BoardLikeCount(board.getId()),
                         commentService.countByBoardId(board.getId()),
-                        getHashTags(board))).collect(Collectors.toList());
+                        getHashTags(board)))
+                .collect(Collectors.toList());
+        return new PageDTO(boardDTOS, PageBoard.getTotalPages());
     }
+
     private String[] getHashTags(Board board) {
         String[] split = hashTagService.findByBoardId(board.getId()).getTag().split("#");
         String[] hashTags = new String[split.length-1];

@@ -46,7 +46,7 @@
                     <div class="header__nav">
                         <nav class="header__menu mobile-menu">
                             <ul>
-                                <li class="active"><a href="./index.html">Homepage</a></li>
+                                <li class="active"><a href="./index.html" th:href="@{/}">Homepage</a></li>
                                 <li><a href="./categories.html">Categories <span class="arrow_carrot-down"></span></a>
                                     <ul class="dropdown">
                                         <li><a href="./signup.html" th:href="@{/member/join}">Sign Up</a></li>
@@ -150,6 +150,9 @@
         </div>
     </div>
 </div>
+                <th:block th:if="${totalPage} > 0" th:each="index : ${#numbers.sequence(1,totalPage)}">
+                    <a th:href="@{/(page=${index})}"><span th:text="${index}">페이지 번호</span></a>
+                </th:block>
 </div>
 </div>
 </div>
@@ -193,8 +196,8 @@
   <div class="search-model">
     <div class="h-100 d-flex align-items-center justify-content-center">
         <div class="search-close-switch"><i class="icon_close"></i></div>
-        <form class="search-model-form">
-            <input type="text" id="search-input" placeholder="Search here.....">
+        <form th:object="${condition}" class="search-model-form" method="get" th:action="@{/search(condition = ${condition.query})}">
+            <input th:field="*{query}" type="text" id="search-input" placeholder="Search here.....">
         </form>
     </div>
 </div>

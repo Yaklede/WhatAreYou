@@ -91,12 +91,7 @@
                         <div class="row">
                             <div class="col-lg-8 col-md-8 col-sm-8">
                                 <div class="section-title">
-                                    <h4>recently</h4>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4">
-                                <div class="btn__all">
-                                    <a href="#" class="primary-btn">View All <span class="arrow_right"></span></a>
+                                    <h4>Search</h4>
                                 </div>
                             </div>
                         </div>
@@ -116,46 +111,19 @@
                                     </div>
                                 </div>
                             </div>
+                            <th:block th:if="${totalPage} > 0" th:each="index : ${#numbers.sequence(1,totalPage)}">
+                                <a th:href="@{/searchPage(query = ${condition.query}, page=${index})}"><span th:text="${index}">페이지 번호</span></a>
+<!--                                <form th:object="${condition}" id="search" method="get" th:action="@{/search(query = ${condition.query}, page=${index})}"><input th:field="*{query}" style="display:none;"><input th:value="${index}" style="display:none;"></form>-->
+<!--                                <h5><a href="#" onclick="document.getElementById('search').submit();"><span th:text="${index}">페이지 번호</span></a></h5>-->
+                            </th:block>
                         </div>
                     </div>
-                    <th:block th:if="${totalPage} > 0" th:each="index : ${#numbers.sequence(1,totalPage)}">
-                        <a th:href="@{/(page=${index})}"><span th:text="${index}">페이지 번호</span></a>
-                    </th:block>
                 </div>
-                <div class="col-lg-4 col-md-6 col-sm-8">
-                    <div class="product__sidebar">
-                        <div class="product__sidebar__view">
-                            <div class="section-title">
-                                <h5>Top 3 Views</h5>
-                            </div>
-                            <div th:each="ranking :  ${rankings}" class="filter__gallery">
-                                <div class="product__sidebar__view__item set-bg mix day years">
-                                    <img th:src="@{/image/{fileId} (fileId = ${ranking.fileId})}" style="height : 100%; width : 100%;object-fit: cover;"/>
-                                    <div class="view"><i class="fa fa-thumbs-up"></i><span th:text="${ranking.likeCount}">9141</span></div>
-                                    <h5><a href="#" th:text="${ranking.title}">Boruto: Naruto next generations</a></h5>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-    <div class="product__sidebar__comment">
-        <div class="section-title">
-            <h5>Follow Ranking top 3</h5>
-        </div>
-        <div th:each="follow : ${follows}" class="product__sidebar__comment__item" style="border-bottom: 1px solid gray; padding-bottom: 10px;">
-            <div class="product__sidebar__comment__item__pic">
-                <img th:src="@{/image/{fileId} (fileId = ${follow.fileId})}" src="img/sidebar/comment-1.jpg" alt="" style="border-radius: 50%; width: 65px; height: 65px;">
-            </div>
-            <div class="product__sidebar__comment__item__text">
-                <h5><a href="#" th:text="${follow.followNickName}" th:href="@{/profile/{followMemberId}/{loginMemberId} (followMemberId = ${follow.followMemberId} , loginMemberId = ${member.memberId})}">nickname</a></h5>
-                <span th:text="|${follow.followerCount} follower|"><i class="fa fa-user-circle"></i> 19.141 follower</span>
+
             </div>
         </div>
     </div>
 </div>
-</div>
-</div>
-</div>
-
 </section>
 <!-- Product Section End -->
 
