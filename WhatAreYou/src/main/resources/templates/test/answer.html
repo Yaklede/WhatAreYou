@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>question</title>
+    <style>
+        .field-error {
+        border-color: #dc3545;
+        color: #dc3545;
+        }
+        </style>
+</head>
+<body>
+    <div class="text-center mt-4">
+        <span class="field-error" th:if="${message == '이미 존재하는 회원입니다.'}">이미 존재하는 회원입니다.</span>
+        <h1 class="h2">Answer</h1>
+        <p class="lead">
+            Start creating your Answer
+        </p>
+    </div>
+    <form th:action="@{/test/qna/{qnaId}(qnaId = ${QuestionForm.qnaId})}" method="post" th:object="${QuestionForm}">
+        <div>
+            <label for="id">답변</label>
+            <input th:field="*{answer}" th:errorclass="field-error" id="id" type="text">
+        </div>
+        <div>
+            <input type="submit">
+        </div>
+    </form>
+</body>
+</html>

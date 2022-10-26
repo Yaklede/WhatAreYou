@@ -74,7 +74,7 @@ public class MainController {
     }
 
     @GetMapping("/search")
-    public String search(@SessionAttribute(name = "loginMember", required = false) Member loginMember,@ModelAttribute("condition") BoardSearchCondition condition,@PageableDefault(size = 1,sort = "id") Pageable pageable,Model model) {
+    public String search(@SessionAttribute(name = "loginMember", required = false) Member loginMember, @ModelAttribute("condition") BoardSearchCondition condition, @PageableDefault(size = 1, sort = "id") Pageable pageable, Model model) {
         if (loginMember == null) {
             PageDTO pageDTOS = getPageDTOS(condition, pageable);
             model.addAttribute("boards", pageDTOS.getContent());
@@ -112,6 +112,7 @@ public class MainController {
         model.addAttribute("member", member);
         return "/main/board/searchLoginPage";
     }
+
 
     @ResponseBody
     @GetMapping("/image/{fileId}")

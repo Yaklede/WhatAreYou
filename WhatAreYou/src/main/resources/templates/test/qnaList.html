@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<div th:each="qna : ${qnaList}">
+    <form th:action="@{/test/qna/{qnaId} (qnaId = ${qna.id})}">
+        <div>
+            <span th:text="${qna.member.nickName}">질문자</span>
+            <span th:text="${qna.questions}">질문내용</span>
+        </div>
+        <div th:if="${not #strings.isEmpty(qna.answers)}">
+            <span th:text="|답변내용 : ${qna.answers}|">답변내용</span>
+        </div>
+        <th:block th:if="${#strings.equals(member.loginId, 'admin')}">
+            <input type="submit">답변하기
+        </th:block>
+    </form>
+
+</div>
+</body>
+</html>

@@ -6,6 +6,9 @@ import java.util.List;
 
 @Data
 public class PageDTO {
-    private final List<BoardDTO> content;
-    private final int totalPage;
+    private  List<BoardDTO> content;
+    private int totalPage;
+
+    public PageDTO(List<BoardDTO> boardDTOS, int totalPages) {
+    }
 }
