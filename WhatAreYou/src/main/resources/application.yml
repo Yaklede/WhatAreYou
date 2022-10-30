@@ -11,7 +11,11 @@ spring:
     url: jdbc:h2:tcp://localhost/~/whatareyou
     username: sa
     password: sa
+    #url: jdbc:mysql://localhost:3306/way?serverTimezone=UTC&characterEncoding=UTF-8
+    #username : root
+    #password : gimin0831
     driver-class-name: org.h2.Driver
+    #driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
       ddl-auto: create-drop

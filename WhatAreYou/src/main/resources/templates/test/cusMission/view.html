@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<section class="ftco-section ftco-degree-bg">
+    <!-- END comment-list -->
+    <div class="comment-form-wrap pt-5">
+            <div class="form-group">
+                <label th:for="loginId">작성자</label>
+                <span th:text="${cus.requester.nickName}"></span>
+            </div>
+            <div class="form-group">
+                <label th:for="title">Title</label>
+                <span th:text="${cus.title}"></span>
+            </div>
+            <div class="form-group">
+                <label th:for="content">Content</label>
+                <span th:text="${cus.content}"></span>
+            </div>
+            <div class="form-group">
+                <label th:for="price">Price</label>
+                <span th:text="${cus.price}"></span>
+            </div>
+            <th:block th:if="${cus.requester.id} != ${member.id}">
+                <a th:href="@{/chat/room(roomId=${chatRoom.roomId})}">문의하기</a>
+                <form th:action="@{/test/CusMission/accept/{cusId}/{memberId} (cusId =${cus.id}, memberId=${member.id})}" method="post">
+                    <button type="submit">커미션 받기</button>
+                </form>
+            </th:block>
+            <th:block th:if="${cus.requester.id} == ${member.id}">
+                <a th:href="@{/chat/room(roomId=${chatRoom.roomId})}">내역</a>
+            </th:block>
+
+    </div>
+</section> <!-- .section -->
+</body>
+</html>

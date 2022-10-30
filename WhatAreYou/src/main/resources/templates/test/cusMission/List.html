@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <ul th:each="cus : ${cusMissionList}">
+        <li th:if="${cus.cusState.getDisplayValue} == 'Ready'">
+            <a th:href="@{/test/CusMission/{cusId} (cusId = ${cus.id})}" th:text="${cus.title}"></a>
+        </li>
+    </ul>
+</body>
+</html>

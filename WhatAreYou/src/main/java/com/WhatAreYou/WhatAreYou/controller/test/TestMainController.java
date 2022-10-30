@@ -19,8 +19,6 @@ import javax.annotation.PostConstruct;
 @RequestMapping("/test")
 public class TestMainController {
 
-
-
     @GetMapping("")
     public String MainTestPage(){
         return "/test/MainPage";
