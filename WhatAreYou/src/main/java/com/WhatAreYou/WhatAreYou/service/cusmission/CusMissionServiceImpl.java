@@ -2,6 +2,7 @@ package com.WhatAreYou.WhatAreYou.service.cusmission;
 
 import com.WhatAreYou.WhatAreYou.domain.CusMission;
 import com.WhatAreYou.WhatAreYou.domain.CusState;
+import com.WhatAreYou.WhatAreYou.domain.FileEntity;
 import com.WhatAreYou.WhatAreYou.domain.Member;
 import com.WhatAreYou.WhatAreYou.exception.CusMissionNotFoundException;
 import com.WhatAreYou.WhatAreYou.exception.MemberNotFoundException;
@@ -51,4 +52,13 @@ public class CusMissionServiceImpl implements CusMissionService {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new MemberNotFoundException());
         cusMission.changeCus(member, CusState.WORK);
     }
+
+
+    @Transactional
+    @Override
+    public void changeState(Long cusId, CusState cusState, FileEntity fileEntity) {
+        CusMission cusMission = cusMissionRepository.findById(cusId).get();
+        cusMission.changeState(cusState,fileEntity);
+    }
+
 }

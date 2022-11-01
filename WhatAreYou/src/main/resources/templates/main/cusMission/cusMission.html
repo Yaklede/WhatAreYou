@@ -116,7 +116,46 @@
                                     </div>
                                 </div>
                                 <div th:if="${cus.cusState.getDisplayValue} != 'Ready'">
-                                    <a class="follow-btn" href="#">작업중인 커미션입니다.</a>
+                                    <div th:if="${cus.cusState.getDisplayValue} != 'Check'">
+                                        <div th:if="${cus.cusState.getDisplayValue} != 'Done'">
+                                            <a class="follow-btn" href="#">작업중인 커미션입니다.</a>
+                                            <br>
+                                            <div th:if="${cus.requester.id} != ${member.id}">
+                                                <form id="submit" th:object="${form}" th:action="@{/CusMission/submit/{cusId} (cusId = ${cus.id})}" method="post" enctype="multipart/form-data">
+                                                    <div class="input__item">
+                                                        <input th:field="*{file}" type="file" class="form-control">
+                                                        <div class="field-error" th:errors="*{file}"></div>
+                                                        <br>
+                                                        <a class="follow-btn" href="#" onclick="document.getElementById('submit').submit();"><i class="fa fa-heart-o"></i>작업제출</a>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div th:if="${cus.cusState.getDisplayValue} == 'Check'">
+                                    <a class="follow-btn" href="#">작업확인중인 커미션입니다.</a>
+                                    <div class="col-lg-12">
+                                        <div class="blog__details__pic">
+                                            <img th:src="@{/image/{fileId} (fileId = ${cus.fileEntity.id})}" src="img/blog/details/blog-details-pic.jpg" style="object-fit: scale-down;" alt="">
+                                        </div>
+                                    </div>
+                                    <div th:if="${cus.requester.id} == ${member.id}">
+                                        <form id="reject" th:action="@{/CusMission/done/{cusId} (cusId = ${cus.id})}" method="post" enctype="multipart/form-data">
+                                            <div class="input__item">
+                                                <a class="follow-btn" href="#" onclick="document.getElementById('reject').submit();"><i class="fa fa-heart-o"></i>작업완료</a>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+
+                                <div th:if="${cus.cusState.getDisplayValue} == 'Done'">
+                                    <a class="follow-btn" href="#">작업완료된 커미션입니다.</a>
+                                    <div th:if="${cus.requester.id} == ${member.id}" class="col-lg-12">
+                                        <div class="blog__details__pic">
+                                            <img th:src="@{/image/{fileId} (fileId = ${cus.fileEntity.id})}" src="img/blog/details/blog-details-pic.jpg" style="object-fit: scale-down;" alt="">
+                                        </div>
+                                    </div>
                                 </div>
                                 </div>
                             </div>

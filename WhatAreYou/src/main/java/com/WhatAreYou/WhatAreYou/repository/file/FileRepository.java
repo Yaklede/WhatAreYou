@@ -11,4 +11,6 @@ public interface FileRepository extends JpaRepository<FileEntity,Long> {
     public FileEntity findByBoardId(Long boardId);
 
     public FileEntity findByMemberId(Long memberId);
+
+    public FileEntity findByCusMissionId(Long cusMissionId);
 }

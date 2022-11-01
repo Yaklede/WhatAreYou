@@ -18,4 +18,6 @@ public interface FileService {
 
     public FileEntity findByMemberId(Long memberId);
 
+    public FileEntity findByCusId(Long cusId);
+
 }

@@ -35,6 +35,9 @@ public class CusMission extends BaseEntity {
     @OneToOne(fetch = FetchType.LAZY)
     private ChatRoom room;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    private FileEntity fileEntity;
+
     @Enumerated(EnumType.STRING)
     private CusState cusState;
 
@@ -52,5 +55,10 @@ public class CusMission extends BaseEntity {
     public void changeCus(Member worker, CusState cusState) {
         this.worker = worker;
         this.cusState = cusState;
+    }
+
+    public void changeState(CusState cusState,FileEntity fileEntity) {
+        this.cusState = cusState;
+        this.fileEntity = fileEntity;
     }
 }

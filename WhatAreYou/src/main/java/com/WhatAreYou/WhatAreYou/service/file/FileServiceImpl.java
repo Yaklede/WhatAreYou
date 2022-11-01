@@ -62,6 +62,11 @@ public class FileServiceImpl implements FileService {
         return fileRepository.findByMemberId(memberId);
     }
 
+    @Override
+    public FileEntity findByCusId(Long cusId) {
+        return fileRepository.findByCusMissionId(cusId);
+    }
+
     private Long updateFile(MultipartFile multipartFile, FileEntity findFile) {
         FileEntity newFile = createFile(multipartFile);
 

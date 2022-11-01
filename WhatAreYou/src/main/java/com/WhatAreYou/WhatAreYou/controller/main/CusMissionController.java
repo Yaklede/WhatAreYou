@@ -1,12 +1,11 @@
 package com.WhatAreYou.WhatAreYou.controller.main;
 
-import com.WhatAreYou.WhatAreYou.domain.ChatRoom;
-import com.WhatAreYou.WhatAreYou.domain.CusMission;
-import com.WhatAreYou.WhatAreYou.domain.CusState;
-import com.WhatAreYou.WhatAreYou.domain.Member;
+import com.WhatAreYou.WhatAreYou.domain.*;
 import com.WhatAreYou.WhatAreYou.dto.form.cusMission.CusForm;
+import com.WhatAreYou.WhatAreYou.dto.form.cusMission.CusSubmitForm;
 import com.WhatAreYou.WhatAreYou.service.chatting.ChatRoomService;
 import com.WhatAreYou.WhatAreYou.service.cusmission.CusMissionService;
+import com.WhatAreYou.WhatAreYou.service.file.FileService;
 import com.WhatAreYou.WhatAreYou.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +15,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.IOException;
 
 @Controller
 @RequiredArgsConstructor
@@ -25,6 +25,7 @@ public class CusMissionController {
     private final CusMissionService cusMissionService;
     private final ChatRoomService chatRoomService;
     private final MemberService memberService;
+    private final FileService fileService;
 
     @GetMapping("/CusMissionList")
     public String list(Model model) {
@@ -53,7 +54,7 @@ public class CusMissionController {
     }
 
     @GetMapping("/CusMission/detail/{cusId}")
-    public String view(@PathVariable("cusId") Long cusId,@SessionAttribute("loginMember")Member loginMember,Model model) {
+    public String view(@PathVariable("cusId") Long cusId, @SessionAttribute("loginMember")Member loginMember, @ModelAttribute("form")CusSubmitForm form, Model model) {
         CusMission cusMission = cusMissionService.findById(cusId);
         ChatRoom chatRoom = chatRoomService.findById(cusMission.getRoom().getRoomId());
         model.addAttribute("cus", cusMission);
@@ -66,6 +67,18 @@ public class CusMissionController {
     public String accept(@PathVariable("cusId") Long cusId, @PathVariable("memberId") Long memberId) {
         cusMissionService.accept(cusId,memberId);
         return "redirect:/CusMissionList";
+    }
+    @PostMapping("/CusMission/submit/{cusId}")
+    public String submit(@PathVariable("cusId")Long cusId, @ModelAttribute("form")CusSubmitForm form) throws IOException {
+        Long saveFile = fileService.saveFile(form.getFile());
+        FileEntity file = fileService.findByOne(saveFile);
+        cusMissionService.changeState(cusId,CusState.CHECK,file);
+        return "redirect:/CusMission/detail/{cusId}";
+    }
+    @PostMapping("/CusMission/done/{cusId}")
+    public String done(@PathVariable("cusId")Long cusId) {
+        cusMissionService.changeState(cusId,CusState.DONE,fileService.findByCusId(cusId));
+        return "redirect:/CusMission/detail/{cusId}";
     }
 
     private CusMission getCusMission(Long memberId, CusForm cusForm) {
