@@ -17,7 +17,9 @@
             <span th:text="|답변내용 : ${qna.answers}|">답변내용</span>
         </div>
         <th:block th:if="${#strings.equals(member.loginId, 'admin')}">
-            <input type="submit">답변하기
+            <div th:if="${not #strings.isEmpty(qna.answers)}">
+                <input type="submit">답변하기
+            </div>
         </th:block>
     </form>
 
